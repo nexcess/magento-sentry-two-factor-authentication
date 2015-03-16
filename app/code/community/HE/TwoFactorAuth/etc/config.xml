@@ -2,7 +2,7 @@
 <config>
     <modules>
         <HE_TwoFactorAuth>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </HE_TwoFactorAuth>
     </modules>
     <global>
@@ -84,12 +84,11 @@
                     <title>Duo Security</title>
                     <link>https://www.duosecurity.com/</link>
                 </duo>
-<!--
                 <google>
                     <title>Google Authenticator</title>
                     <link>https://support.google.com/accounts/answer/1066447?hl=en</link>
                 </google>
-
+<!--
                 <authy>
                     <title>Authy</title>
                     <link>https://www.authy.com/</link>

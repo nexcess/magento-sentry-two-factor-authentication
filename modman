@@ -1,8 +1,8 @@
 # HE_TwoFactorAuth
 
-code                  			app/code/community/HE/TwoFactorAuth/
-adminhtml/layout/he_twofactor/*      	app/design/adminhtml/default/default/layout/he_twofactor/
-adminhtml/template/he_twofactor/*     	app/design/adminhtml/default/default/template/he_twofactor/
-js/he_twofactor/*			js/he_twofactor/
-lib/Duo/duo_web.php			lib/Duo/duo_web.php
-TwoFactorAuth.xml       		app/etc/modules/TwoFactorAuth.xml 
+app/code/community/HE/TwoFactorAuth     app/code/community/HE/TwoFactorAuth
+adminhtml/layout/he_twofactor      	app/design/adminhtml/default/default/layout/he_twofactor
+adminhtml/template/he_twofactor     	app/design/adminhtml/default/default/template/he_twofactor
+js/he_twofactor				js/he_twofactor
+lib/Duo					lib/Duo
+app/etc/modules/TwoFactorAuth.xml       app/etc/modules/TwoFactorAuth.xml 
