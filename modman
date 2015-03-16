@@ -5,4 +5,4 @@ app/design/adminhtml/default/default/layout/he_twofactor     	app/design/adminht
 app/design/adminhtml/default/default/template/he_twofactor     	app/design/adminhtml/default/default/template/he_twofactor
 js/he_twofactor							js/he_twofactor
 lib/Duo								lib/Duo
-app/etc/modules/TwoFactorAuth.xml       			app/etc/modules/TwoFactorAuth.xml 
+app/etc/modules/HE_TwoFactorAuth.xml       			app/etc/modules/HE_TwoFactorAuth.xml 
