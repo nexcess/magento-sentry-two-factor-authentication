@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<layout>
+
+    <adminhtml_twofactor_duo>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/template" name="content" template="he_twofactor/duo/auth.phtml" />
+        </block>
+    </adminhtml_twofactor_duo>
+
+    <adminhtml_twofactor_google>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/template" name="content" template="he_twofactor/google/auth.phtml">
+                <block type="core/text_list" name="form.additional.info" />
+            </block>
+        </block>
+    </adminhtml_twofactor_google>
+
+    <adminhtml_twofactor_authy>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/template" name="content" template="he_twofactor/authy/auth.phtml">
+                <block type="core/text_list" name="form.additional.info" />
+            </block>
+        </block>
+    </adminhtml_twofactor_authy>
+
+</layout>

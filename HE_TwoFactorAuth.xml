@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <HE_TwoFactorAuth>
+            <active>true</active>
+            <codePool>community</codePool>
+        </HE_TwoFactorAuth>
+    </modules>
+</config>

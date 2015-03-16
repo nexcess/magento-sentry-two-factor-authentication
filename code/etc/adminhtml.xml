@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <he2faconfig translate="title" module="he_twofactorauth">
+                                        <title>Configure Two Factor Security</title>
+                                        <sort_order>0</sort_order>
+                                    </he2faconfig>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

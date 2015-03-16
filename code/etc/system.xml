@@ -1,0 +1,154 @@
+<?xml version="1.0" ?>
+<config>
+    <tabs>
+        <he2faconfig translate="label" module="he_twofactorauth">
+            <label>HE Multifactor Login</label>
+            <sort_order>99999</sort_order>
+        </he2faconfig>
+    </tabs>
+    <sections>
+        <he2faconfig translate="label" module="he_twofactorauth">
+            <label>Configuration</label>
+            <tab>he2faconfig</tab>
+            <!-- frontend_type>text</frontend_type -->
+            <sort_order>20</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <info>
+                    <logging translate="label"/>
+                    <label>Module Information - Please Read First</label>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <comment>
+                        <![CDATA[<p>Human Element Multifactor authentication provides an additional check when logging into your
+                        Magento administration system. Once configured, an additional challenge screen is added to
+                        the admin login process.  This screen will interact with an additional method of contact, usually
+                        a cellphone or email, that will prove that the user attempting login is the real user.</p>
+                        <p>For more information, Wikipedia has a good introduction to
+                        <a href="http://en.wikipedia.org/wiki/Multi-factor_authentication" target="_new">Multifactor Authentication</a>
+                        <p><strong>NOTE - </strong>When using multifactor authentication it is highly advised that each admin user have their
+                        own account.</p>
+
+                        <p style="padding-top:10px">To find out more about Human Element and our Magento services, please visit our
+                        website at
+                        <a href="http://www.human-element.com/" target="_new">http://www.human-element.com</a> or fill
+                        in our <a href="http://www.human-element.com/contact/" target="_new">contact form</a>
+                        ]]>
+                    </comment>
+                </info>
+                <control>
+                    <logging translate="label"/>
+                    <label>Provider Selection</label>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <comment>
+                        <![CDATA[Choose an authentication provider or disable multi-factor authentication]]>
+                    </comment>
+                    <fields>
+                        <provider>
+                            <label>Choose Two Factor Provider</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>he_twofactorauth/sysconfig_provider</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <comment>
+                                <![CDATA[Select the security provider for authentication]]>
+                            </comment>
+                        </provider>
+                    </fields>
+                </control>
+                <duo translate="label">
+                    <label>Duo Security</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment>
+                        <![CDATA[<p><strong>About Duo Security</strong><br/>Duo Security is a leading provider of online
+                        Two Factor authentication. For more information, please visit their
+                        <a href="https://www.duosecurity.com/" target="_new">website</a>.</p>
+                        <p><strong>SETUP</strong> For information on setting up a new account or adding an integration please see one
+                        of the following:
+                        <ul style="padding-left:15px">
+                        <li>To create a Duo account, go to the <a href="https://signup.duosecurity.com/" target="_new">signup</a> page.
+                        <li>To get your Integration settings, please visit the
+                        <a href="https://admin-41c88c1d.duosecurity.com/integrations" target="_new">Integrations Control Panel</a> in your Duo account.
+                        <li>For information on setting up a new integration, please read
+                        <a href="https://www.duosecurity.com/docs/getting_started">Getting Started with Duo Security</a>
+                        </ul></p>
+                        <p>When setting up a new integration select "Auth API" as the type of integration.</p>
+                        <p><strong>NOTE!</strong>You must have an account before enabling this module.<br/><p>
+                        ]]>
+                    </comment>
+                    <fields>
+                        <ikey>
+                            <label>Integration Key</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                <![CDATA[The Integration Key from the Duo Security admin dashboard integrations page]]>
+                            </comment>
+                        </ikey>
+                        <skey>
+                            <label>Secret Key</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                <![CDATA[The Secret Key from the Duo Security admin dashboard integrations page]]>
+                            </comment>
+                        </skey>
+                        <host>
+                            <label>Duo Security API hostname</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                <![CDATA[Supply the API hostname from the Duo Security admin dashboard integrations page]]>
+                            </comment>
+                        </host>
+                        <akey>
+                            <label>Application Key</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>he_twofactorauth/sysconfig_appkey</backend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[The Application Key is a key you create that is unique for your application.
+                                Must be at least 40 characters long. Use the autogenerated key above,
+                                or create one of your own.]]>
+                            </comment>
+                        </akey>
+                        <validated>
+                            <label>Settings Validated</label>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>1000</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[The authentication settings validation status. Duo authentication can not be used
+                            until this field says "VALID"]]>
+                            </comment>
+                        </validated>
+                    </fields>
+                </duo>
+            </groups>
+        </he2faconfig>
+    </sections>
+</config>

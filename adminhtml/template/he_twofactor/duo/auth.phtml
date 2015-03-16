@@ -1,0 +1,54 @@
+<?php
+
+$user           = Mage::getSingleton('admin/session')->getUser()->getUsername();
+$sign_request   = Mage::getModel("he_twofactorauth/validate_duo")->signRequest($user);
+$auth_host      = Mage::getModel("he_twofactorauth/validate_duo")->getHost();
+
+$ready = ($user && $sign_request && $auth_host);  // all have to be set
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><?php echo Mage::helper('adminhtml')->__('Duo Two Factor Authentication'); ?></title>
+    <link type="text/css" rel="stylesheet" href="<?php echo $this->getSkinUrl('reset.css'); ?>" media="all" />
+    <link type="text/css" rel="stylesheet" href="<?php echo $this->getSkinUrl('boxes.css'); ?>" media="all" />
+    <link rel="icon" href="<?php echo $this->getSkinUrl('favicon.ico'); ?>" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo $this->getSkinUrl('favicon.ico'); ?>" type="image/x-icon" />
+
+    <!-- <script type="text/javascript" src="<?php echo $this->getJsUrl('Duo-Web-v1.bundled.min.js'); ?>"></script> -->
+    <script type="text/javascript" src="<?php echo $this->getJsUrl('he_twofactor/Duo-Web-v1.bundled.min.js'); ?>"></script>
+
+    <!--[if IE]> <link rel="stylesheet" href="<?php echo $this->getSkinUrl('iestyles.css'); ?>" type="text/css" media="all" /> <![endif]-->
+    <!--[if lt IE 7]> <link rel="stylesheet" href="<?php echo $this->getSkinUrl('below_ie7.css'); ?>" type="text/css" media="all" /> <![endif]-->
+    <!--[if IE 7]> <link rel="stylesheet" href="<?php echo $this->getSkinUrl('ie7.css'); ?>" type="text/css" media="all" /> <![endif]-->
+</head>
+<body id="page-login">
+<div class="login-container">
+    <div class="login-box">
+
+        <?php if ($ready) { ?>
+        <div id="messages">
+            <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        </div>
+        <script>
+            Duo.init({
+                'host': <?php echo "'" . $auth_host . "'"; ?>,
+                'post_action':'<?php echo $this->getUrl('adminhtml/twofactor/verify') ?>',
+                'sig_request':<?php echo "'" . $sign_request . "'"; ?>,
+                'form_key':'<?php echo Mage::getSingleton('core/session')->getFormKey()?>'
+            });
+        </script>
+
+        <iframe id="duo_iframe" width="580" height="330" frameborder="0" allowtransparency="true" style="background: transparent;"></iframe>
+        <?php } else { ?>
+            The Duo Security Two-Factor Authentication is not configured correctly and has been disabled. <br/>
+            Please use the link below to login and review the settings.<br/>
+        <?php } ?>
+        <a href="<?php echo $this->getUrl('adminhtml/index/logout') ?>" class="link-logout"><?php echo $this->__('Return to the Login screen') ?></a>
+    </div>
+</div>
+
+</body>
+</html>
