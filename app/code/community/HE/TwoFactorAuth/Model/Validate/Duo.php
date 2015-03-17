@@ -17,16 +17,16 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
 {
     public function __construct()
     {
+        $this->_helper = Mage::helper('he_twofactorauth');
+
         $this->_host = Mage::getStoreConfig('he2faconfig/duo/host');
         $this->_ikey = Mage::helper('core')->decrypt(Mage::getStoreConfig('he2faconfig/duo/ikey'));
         $this->_skey = Mage::helper('core')->decrypt(Mage::getStoreConfig('he2faconfig/duo/skey'));
         $this->_akey = Mage::helper('core')->decrypt(Mage::getStoreConfig('he2faconfig/duo/akey'));
 
         if (!($this->_host && $this->_ikey && $this->_skey && $this->_akey)) {
-
-            Mage::helper('he_twofactorauth')->disable2FA();
-
-            $msg = Mage::helper('he_twofactorauth')->__('Duo Twofactor Authentication is missing one or more settings. Please configure HE Two Factor Authentication.');
+            $this->_helper->disable2FA();
+            $msg = $this->_helper->__('Duo Twofactor Authentication is missing one or more settings. Please configure HE Two Factor Authentication.');
             Mage::getSingleton('adminhtml/session')->addError($msg);
         }
     }
@@ -53,54 +53,40 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
 
     public function check()
     {
-        //todo - finish calling DUO check
-        //call the Duo Check rest API to test the integration settings
+        return Mage::getModel('he_twofactorauth/validate_duo_request')->check();
+    }
 
-        $params=array();
+    public function isValid() {
 
-        $date = date("r");
+        $status=HE_TwoFactorAuth_Model_Validate::TFA_CHECK_FAIL;
 
-        $path ="/auth/v2/check";
-        $url = "https://".$this->getHost().$path;
-
-        $headers = array("Date: $date");
-
-        $cannon = array (
-            "date" => $date,
-            "method"=>"GET",
-            "host"=>$this->_host,
-            "path"=>$path,
-        );
-
-        if (count($params)) {
-            $cannon["params"]=ksort($params);
-            $url .= "?".http_build_query($params);
+        //TODO - Use provider based checks instead of hardcoding for Duo
+        if (!Mage::getModel('he_twofactorauth/validate_duo_request')->ping()) {
+            $msg = $this->_helper->__('Can not connect to specified Duo API server - TFA settings not validated');
+        } elseif (!$this->check()) {
+            $msg = $this->_helper->__('Credentials for Duo API server not accepted, please check - TFA settings not validated');
         } else {
-            $cannon["params"]="";
+            $status=HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS;
+            $msg = $this->_helper->__('Credentials for Duo API server accepted - TFA settings validated');
         }
 
-        $hashData = implode("\n",$cannon);
-        $hash = hash_hmac('sha1', $hashData , $this->_skey);
+        //let the user know the status
+        if ($status==HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS) {
+            Mage::getSingleton('adminhtml/session')->addSuccess($msg);
+            Mage::log("isValid - $msg.", Zend_Log::ERR, "two_factor_auth.log");
+            $newMode=$this->_helper->__('VALID');
+        } else {
+            Mage::getSingleton('adminhtml/session')->addError($msg);
+            Mage::log("isValid - $msg.", Zend_Log::INFO, "two_factor_auth.log");
+            $newMode=$this->_helper->__('NOT VALID');
+        }
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        //curl_setopt($curl, CURLOPT_POST, 1); //defaults to get
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_USERPWD, $this->_ikey . ":" . $hash);
-        curl_setopt($curl, CURLOPT_HEADER, 1);
-//        curl_setopt($curl, CURLINFO_HEADER_OUT, 1);
+        //if mode changed, update config
+        if ($newMode <> Mage::getStoreConfig('he2faconfig/duo/validated')) {
+            Mage::getModel('core/config')-> saveConfig('he2faconfig/duo/validated', $newMode);
+            Mage::app()->getStore()->resetConfig();
+        }
 
-//        curl_setopt($curl, CURLOPT_VERBOSE, true);
-
-//        echo print_r(curl_getinfo($curl),true) ."\n";
-
-        $result = curl_exec($curl);
-//        echo print_r(curl_getinfo($curl),CURLINFO_HEADER_OUT) ."\n";
-//        echo curl_error ( $curl ) ."\n";
-
-        echo print_r($result,true) ."\n";
-        curl_close($curl);
-        return true;
-
+        return $status;
     }
 }

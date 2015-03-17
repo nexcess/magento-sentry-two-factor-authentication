@@ -17,42 +17,24 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function isDisabled(){
 
-        $return=true;
+        $tfaFlag = MAGENTO_ROOT . '/tfaoff.flag';
 
-        if  (!$this->_provider || $this->_provider == 'disabled') {
-            return $return;
+        if (file_exists($tfaFlag)) {
+            Mage::log("isDisabled - Found tfaoff.flag, TFA disabled.", 0, "two_factor_auth.log");
+            return true;
         }
 
-        //TODO - Use provider based checks instead of hardcoding for Duo
-        if (!Mage::getModel('he_twofactorauth/validate_duo_request')->ping()) {
-            $msg = Mage::helper('he_twofactorauth')->__(
-                'Can not connect to specified Duo API server - TFA settings not validated'
-            );
-            Mage::getSingleton('adminhtml/session')->addError($msg);
-
-            Mage::log("isDisabled - ping Duo API server failed - settings not valid.", 0, "two_factor_auth.log");
-            $newMode="NOT VALID";
-
-        } elseif (!Mage::getModel('he_twofactorauth/validate_duo_request')->check()) {
-            $msg = Mage::helper('he_twofactorauth')->__(
-                'Credentials for Duo API server not accepted, please check - TFA settings not validated'
-            );
-            Mage::getSingleton('adminhtml/session')->addError($msg);
-
-            Mage::log("isDisabled - check Duo API server failed - settings not valid.", 0, "two_factor_auth.log");
-            $newMode="NOT VALID";
-        } else {
-            $newMode="VALID";
-            $return=false;
+        if (!$this->_provider || $this->_provider == 'disabled') {
+            return true;
         }
 
-        if ($newMode <> Mage::getStoreConfig('he2faconfig/duo/validated')) {
-            Mage::getModel('core/config')->
-                saveConfig('he2faconfig/duo/validated', $newMode);
-            Mage::app()->getStore()->resetConfig();
+        $method = Mage::getSingleton('he_twofactorauth/validate_'.$this->_provider) ;
+
+        if (!$method) {
+            return true;
         }
 
-        return $return;
+        return !$method->isValid();
     }
 
     public function getProvider(){

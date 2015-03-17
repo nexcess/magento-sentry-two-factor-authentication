@@ -18,12 +18,8 @@ class HE_TwoFactorAuth_Model_Validate extends Mage_Core_Model_Abstract
     const TFA_STATE_PROCESSING  = 1;
     const TFA_STATE_ACTIVE      = 2;
 
-    public function getProviderArray() {
-        return array(
-            array('value' => 'duo',     'label'=>Mage::helper('adminhtml')->__('Duo Security')),
-            array('value' => 'google',  'label'=>Mage::helper('adminhtml')->__('Google')),
-        );
-    }
+    const TFA_CHECK_FAIL        = 0;
+    const TFA_CHECK_SUCCESS     = 1;
 
     public function signRequest($user) {
     }
@@ -31,6 +27,7 @@ class HE_TwoFactorAuth_Model_Validate extends Mage_Core_Model_Abstract
     public function verifyResponse($response) {
     }
 
-
-
+    public function isValid() {
+        return $this::TFA_CHECK_FAIL;
+    }
 }
