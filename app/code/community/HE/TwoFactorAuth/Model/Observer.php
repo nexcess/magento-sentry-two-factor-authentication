@@ -15,6 +15,7 @@
 
 class HE_TwoFactorAuth_Model_Observer
 {
+    protected $_allowedActions = array('login','forgotpassword');
 
     public function admin_user_authenticate_after($observer)
     {
@@ -56,8 +57,10 @@ class HE_TwoFactorAuth_Model_Observer
 
         $request = $observer->getControllerAction()->getRequest();
         $tfaState = Mage::getSingleton('admin/session')->get2faState();
+        $action = Mage::app()->getRequest()->getActionName();
+
         Mage::log("check_twofactor_active - controller name ".$request->getControllerName(), 0, "two_factor_auth.log");
-        Mage::log("check_twofactor_active - action name ".Mage::app()->getRequest()->getActionName(), 0, "two_factor_auth.log");
+        Mage::log("check_twofactor_active - action name ".$action, 0, "two_factor_auth.log");
 
         switch ($tfaState) {
             case HE_TwoFactorAuth_Model_Validate::TFA_STATE_NONE:
@@ -72,13 +75,13 @@ class HE_TwoFactorAuth_Model_Observer
             default:
                 Mage::log("check_twofactor_active - tfa state unknown - ".$tfaState, 0, "two_factor_auth.log");
         }
-        if(Mage::app()->getRequest()->getActionName() == 'logout' ) {
+        if( $action == 'logout' ) {
             Mage::log("check_twofactor_active - logout", 0, "two_factor_auth.log");
             Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_NONE);
             return $this;
         }
 
-        if(Mage::app()->getRequest()->getActionName() == 'login' ) {
+        if(in_array( $action, $this->_allowedActions )) {
             return $this;
         }
 
