@@ -82,8 +82,8 @@
                         <li>For information on setting up a new integration, please read
                         <a href="https://www.duosecurity.com/docs/getting_started">Getting Started with Duo Security</a>
                         </ul></p>
-                        <p>When setting up a new integration select "Auth API" as the type of integration.</p>
-                        <p><strong>NOTE!</strong>You must have an account before enabling this module.<br/><p>
+                        <p>When setting up a new integration select <strong>"Web SDK"</strong> as the type of integration.</p>
+                        <p><strong>NOTE!</strong> You must have a DUO account before enabling this module.<br/><p>
                         ]]>
                     </comment>
                     <fields>
