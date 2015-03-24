@@ -72,7 +72,7 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
 
         //let the user know the status
         if ($status==HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS) {
-            Mage::getSingleton('adminhtml/session')->addSuccess($msg);
+            //Mage::getSingleton('adminhtml/session')->addSuccess($msg);
             Mage::log("isValid - $msg.", Zend_Log::ERR, "two_factor_auth.log");
             $newMode=$this->_helper->__('VALID');
         } else {
