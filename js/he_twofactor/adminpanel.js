@@ -3,6 +3,7 @@
 c)),f=!0))}})("he_twofactor_ready",window);
 //on document ready
 he_twofactor_ready(function() {
+  console.log('adminpanel.js two-factor authentication extension.');
   //if the provider selector is on this page
   var providerSelect=document.getElementById('he2faconfig_control_provider');
   if(providerSelect!=undefined){
