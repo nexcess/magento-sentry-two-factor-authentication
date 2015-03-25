@@ -67,7 +67,7 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
     /*
      * abstract function in GoogleAuthenticator, needs to be defined here TODO
      */
-    function getData($username)
+    function getDataBad($username,$index=NULL) // this was causing problems, not sure why...
     {
         $user = Mage::getModel('admin/user')->loadByUsername($username);
         return $user->getTwofactorauthToken() == null ? false : $user->getTwofactorauthToken();
