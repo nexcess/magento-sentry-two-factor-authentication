@@ -19,6 +19,33 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
         //$user->save(); //password gets messed up after saving?!
     }
 
+
+    public function isValid() {
+        return true; 
+    }
+
+    /* 
+     * generates and returns a new shared secret
+     */
+    public function generateSecret() { 
+        $ga = new PHPGangsta_GoogleAuthenticator();
+        $secret = $ga->createSecret();
+        return $secret;
+    }
+
+
+    /* 
+     * generates and returns QR code URL from google
+     */
+    public function generateQRCodeUrl($secret, $username) { 
+        if ((empty($secret)) || (empty($username))) { return; }
+
+        $ga = new PHPGangsta_GoogleAuthenticator();
+        $url = $ga->getQRCodeGoogleUrl($username, $secret);
+        return $url;
+    }
+
+
     /*
      * abstract function in GoogleAuthenticator, needs to be defined here
      */
