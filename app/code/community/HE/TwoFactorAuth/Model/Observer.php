@@ -101,8 +101,8 @@ class HE_TwoFactorAuth_Model_Observer
             // set we are processing 2f login
             Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_PROCESSING);
 
-            //TODO - change to config setting
-            $twoFactAuthPage = Mage::helper("adminhtml")->getUrl("adminhtml/twofactor/duo");
+            $provider = Mage::helper('he_twofactorauth')->getProvider();
+            $twoFactAuthPage = Mage::helper("adminhtml")->getUrl("adminhtml/twofactor/$provider");
 
             //disable the dispatch for now
             $request = Mage::app()->getRequest();
