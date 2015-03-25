@@ -26,6 +26,15 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         $this->renderLayout();
     }
 
+
+    public function googleAction()
+    {
+        Mage::log("googleAction start", 0, "two_factor_auth.log");
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+
     /***
      * verify is a generic action, looks at the current config to get provider, then dispatches correct verify method
      * @return $this
@@ -71,6 +80,45 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         $this->_redirect('*');
         return $this;
     }
+
+
+    private function _verifyGoogle()
+    {
+        Mage::log("verifyAction - start Google validate", 0, "two_factor_auth.log");
+        $params =  $this->getRequest()->getParams();
+
+        // save the user's shared secret 
+        if ((!empty($params['google_secret'])) && (strlen($params['google_secret']) == 16)) { 
+            $user            = Mage::getSingleton('admin/session')->getUser();
+            $admin_user      = Mage::getModel('admin/user')->load($user->getId());
+            $admin_user->twofactor_google_secret = $params['google_secret'];
+            $admin_user->save(); // TODO should we save this encrypted?
+            Mage::log("google secret saved", 0, "two_factor_auth.log");
+        }
+        else { 
+            // check the key
+            // TODO add better error checking and flow!
+            if ((strlen($params['input_code']) == 6) && (is_numeric($params['input_code']))) { 
+                Mage::log("Checking input code '" . $params['input_code'] ."'", 0, "two_factor_auth.log");
+                $g2fa = Mage::getModel("he_twofactorauth/validate_google");
+                $goodCode = $g2fa->validateCode($params['input_code']);
+                if ($goodCode) { 
+                    $msg = Mage::helper('he_twofactorauth')->__("Valid code entered");
+                    Mage::getSingleton('adminhtml/session')->addSuccess($msg);
+                    Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE);
+                    $this->_redirect('*');
+                    return $this;
+                } else { 
+                    $msg = Mage::helper('he_twofactorauth')->__("Invalid code entered");
+                    Mage::getSingleton('adminhtml/session')->addError($msg);
+                    $this->_redirect('adminhtml/twofactor/google');
+                    return $this;
+                }
+            }
+        }
+    }
+
+
 
     /***
      * verify is a generic action, looks at the current config to get provider, then dispatches correct verify method
