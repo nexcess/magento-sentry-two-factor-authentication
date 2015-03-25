@@ -47,7 +47,25 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
 
 
     /*
-     * abstract function in GoogleAuthenticator, needs to be defined here
+     * verifies the code using TOTP
+     */
+
+    public function validateCode($code) {
+        if (empty($code)) { return; }
+        Mage::log("Google - validateCode: " . $code, 0, "two_factor_auth.log");
+
+        // get user's shared secret
+        $user            = Mage::getSingleton('admin/session')->getUser();
+        $admin_user      = Mage::getModel('admin/user')->load($user->getId());
+
+        $ga = new PHPGangsta_GoogleAuthenticator();
+        return $ga->verifyCode($admin_user->twofactor_google_secret, $code, 2);  // TODO make time window configurable?
+    }
+
+
+
+    /*
+     * abstract function in GoogleAuthenticator, needs to be defined here TODO
      */
     function getData($username)
     {
