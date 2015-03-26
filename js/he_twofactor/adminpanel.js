@@ -7,38 +7,76 @@ he_twofactor_ready(function() {
   //if the provider selector is on this page
   var providerSelect=document.getElementById('he2faconfig_control_provider');
   if(providerSelect!=undefined){
-    //if the "duo" section is on this page
-    var duoHeadLink=document.getElementById('he2faconfig_duo-head');
-    if(duoHeadLink!=undefined){
-      var duoPanel=duoHeadLink.parentNode.parentNode;
-      //set the duo panel's visibility
-      var duoPanelVisibility=function(selectValue){
-        //if duo is selected
-        if(selectValue=='duo'){
-          //show the panel
-          duoPanel.style.display='block';
-          //if this browser supports classList.contains
-          if(duoPanel.classList){
-            if(duoPanel.classList.contains){
-              //if the class list does NOT contain active
-              if(!duoPanel.classList.contains('active')){
-                //open the panel
-                duoHeadLink.onclick();
+    //FUNCTION: cache the toggle-able elements on initial page load
+    var toggleElems;
+    var cacheToggleSections=function(){
+      toggleElems=[];
+      //for each available select option
+      var options=providerSelect.getElementsByTagName('option');
+      for(var s=0;s<options.length;s++){
+        //if this is NOT the first (disabled option)
+        var oVal=options[s].value;
+        if(oVal!=undefined&&oVal.length>0&&oVal.toLowerCase().indexOf('disable')!=0){
+          //get the a link for this toggle-able section (if exists)
+          var alink=document.getElementById('he2faconfig_'+oVal+'-head');
+          //if this link exists
+          if(alink!=undefined){
+            //get the section wrap
+            var wrap=alink.parentNode.parentNode;
+            //if the wrap exists
+            if(wrap!=undefined){
+              //cache the toggle-able elements for this select item
+              toggleElems.push({'key':oVal,'wrap':wrap,'alink':alink});
+            }
+          }else{
+            console.log('"'+oVal+'" does NOT appear as an admin section although it appears in the provider selection dropdown!');
+          }
+        }
+      }
+    };
+    //FUNCTION: update which wrapped section is visible, based on current provider selection
+    var updateVisibleWrap=function(){
+      //if the toggle-able wraps are cached
+      if(toggleElems!=undefined){
+        //if providerSelect is loaded (if exists)
+        if(providerSelect!=undefined){
+          //get the selected value
+          var selKey=providerSelect.value;
+          //for each toggle-able wrap
+          for(var w=0;w<toggleElems.length;w++){
+            //get the toggle-able wrap's data
+            var dat=toggleElems[w];
+            //if this wrap is selected to be visible
+            if(dat['key']==selKey){
+              //show the panel
+              dat['wrap'].style.display='block';
+              //if this browser supports classList.contains
+              if(dat['wrap'].classList){
+                if(dat['wrap'].classList.contains){
+                  //if the class list does NOT contain active
+                  if(!dat['wrap'].classList.contains('active')){
+                    //open the panel
+                    dat['alink'].onclick();
+                  }
+                }
               }
+            }else{
+              //DESELECTED section... hide the panel wrapper
+              dat['wrap'].style.display='none';
             }
           }
-        }else{
-          //duo is NOT selected... hide the panel
-          duoPanel.style.display='none';
         }
-      };
-      //selected provider change event
-      providerSelect.onchange=function(){
-        //set the duo panel's visibility
-        duoPanelVisibility(this.value);
-      };
-      //set the duo panel's visibility on page load
-      duoPanelVisibility(providerSelect.value);
-    }
+      }
+    };
+    //==STUFF TO DO ON PAGE LOAD==
+    //attach the onchange event to the provier dropdown
+    providerSelect.onchange=function(){
+      //make the selected section visible (if any) and hide any (deselected) sections
+      updateVisibleWrap();
+    };
+    //cache list of toggle-able wraps
+    cacheToggleSections();
+    //make the selected section visible (if any) and hide any (deselected) sections
+    updateVisibleWrap();
   }
 });
