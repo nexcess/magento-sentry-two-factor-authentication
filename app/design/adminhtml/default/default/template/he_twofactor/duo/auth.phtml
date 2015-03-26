@@ -17,7 +17,6 @@ $ready = ($user && $sign_request && $auth_host);  // all have to be set
     <link rel="icon" href="<?php echo $this->getSkinUrl('favicon.ico'); ?>" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $this->getSkinUrl('favicon.ico'); ?>" type="image/x-icon" />
 
-    <!-- <script type="text/javascript" src="<?php echo $this->getJsUrl('Duo-Web-v1.bundled.min.js'); ?>"></script> -->
     <script type="text/javascript" src="<?php echo $this->getJsUrl('he_twofactor/Duo-Web-v1.bundled.min.js'); ?>"></script>
 
     <!--[if IE]> <link rel="stylesheet" href="<?php echo $this->getSkinUrl('iestyles.css'); ?>" type="text/css" media="all" /> <![endif]-->
@@ -25,13 +24,15 @@ $ready = ($user && $sign_request && $auth_host);  // all have to be set
     <!--[if IE 7]> <link rel="stylesheet" href="<?php echo $this->getSkinUrl('ie7.css'); ?>" type="text/css" media="all" /> <![endif]-->
 </head>
 <body id="page-login">
-<div class="login-container">
-    <div class="login-box">
+<div class="login-container" style="margin: 100px auto;">
 
-        <?php if ($ready) { ?>
+    <div class="login-box">
+        <div class="login-form" style="background-size: 100% 100%;">
         <div id="messages">
             <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
         </div>
+
+        <?php if ($ready) { ?>
         <script>
             Duo.init({
                 'host': <?php echo "'" . $auth_host . "'"; ?>,
@@ -41,12 +42,14 @@ $ready = ($user && $sign_request && $auth_host);  // all have to be set
             });
         </script>
 
-        <iframe id="duo_iframe" width="580" height="330" frameborder="0" allowtransparency="true" style="background: transparent;"></iframe>
+        <iframe id="duo_iframe" width="468" height="330" frameborder="0" allowtransparency="true" style="background: transparent;"></iframe>
         <?php } else { ?>
             The Duo Security Two-Factor Authentication is not configured correctly and has been disabled. <br/>
             Please use the link below to login and review the settings.<br/>
         <?php } ?>
         <a href="<?php echo $this->getUrl('adminhtml/index/logout') ?>" class="link-logout"><?php echo $this->__('Return to the Login screen') ?></a>
+        </div>
+            <div class="bottom"></div>
     </div>
 </div>
 
