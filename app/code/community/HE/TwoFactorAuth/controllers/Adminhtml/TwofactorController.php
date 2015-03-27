@@ -94,6 +94,12 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             $admin_user->twofactor_google_secret = $params['google_secret'];
             $admin_user->save(); // TODO should we save this encrypted?
             Mage::log("google secret saved", 0, "two_factor_auth.log");
+
+            // redirect back to login, now they'll need to enter the code.
+            $msg = Mage::helper('he_twofactorauth')->__("Please enter your input code.");
+            Mage::getSingleton('adminhtml/session')->addError($msg);
+            $this->_redirect('adminhtml/twofactor/google');
+            return $this;
         }
         else { 
             // check the key

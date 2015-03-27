@@ -29,16 +29,18 @@
     // check to see if the user has a secret shared, force QR code if not
     $user            = Mage::getSingleton('admin/session')->getUser();
     $admin_user      = Mage::getModel('admin/user')->load($user->getId());
-    if (is_null($admin_user->twofactor_google_secret)) { 
-       $g2fa = Mage::getModel("he_twofactorauth/validate_google");
-       $secret = $g2fa->generateSecret();
-       $qr_url = $g2fa->generateQRCodeUrl($secret, $user->getUsername());
-       $msg = Mage::helper('he_twofactorauth')->__('You must set up your Google Authenticator app using the QR code below.');
-       Mage::getSingleton('adminhtml/session')->addNotice($msg);
-    }
-    else { 
+    $secret          = $admin_user->getTwofactorGoogleSecret();
+
+    if (!empty($secret)) {
         $msg = Mage::helper('he_twofactorauth')->__('Please complete the Google two factor authentication');
         Mage::getSingleton('adminhtml/session')->addNotice($msg);
+    }
+    else { 
+        $g2fa = Mage::getModel("he_twofactorauth/validate_google");
+        $secret = $g2fa->generateSecret();
+        $qr_url = $g2fa->generateQRCodeUrl($secret, $user->getUsername());
+        $msg = Mage::helper('he_twofactorauth')->__('You must set up your Google Authenticator app using the QR code below.');
+        Mage::getSingleton('adminhtml/session')->addNotice($msg);        
     }
 
 ?>
@@ -74,6 +76,14 @@
 
                     <p align='center'><img src="<?php echo $qr_url; ?>" /></p>
                     <input type="hidden" name="google_secret" value="<?php echo $secret; ?>"    />
+                    <p><strong>To use this QR code in Google Authenticator</strong>:</p>
+                    <ol>
+                        <li>Start the app</li>
+                        <li>Choose 'set up account' from the menu (top right corner)</li>
+                        <li>Choose 'scan a barcode'</li>
+                        <li>Point the camera at the QR code above</li>
+                        <li>When the app tells you the secret has been saved, press the 'Continue' button below.</li>
+                    </ol>
 
                 <?php } else { // ... otherwise, show the input code field ?>
                     <div class="input-box forgot-password"><label for="input_code"><?php echo Mage::helper('adminhtml')->__('Security Code'); ?></label><br />
