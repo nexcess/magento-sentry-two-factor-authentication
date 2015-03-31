@@ -39,6 +39,18 @@
             
         </events>
 
+        <resources>
+            <he_twofactorauth>
+                <setup>
+                    <module>HE_TwoFactorAuth</module>
+                    <class>HE_TwoFactorAuth_Model_Resource_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </he_twofactorauth>
+        </resources>
+
     </global>
 
     <admin>
