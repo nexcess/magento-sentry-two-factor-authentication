@@ -91,8 +91,10 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         if ((!empty($params['google_secret'])) && (strlen($params['google_secret']) == 16)) { 
             $user            = Mage::getSingleton('admin/session')->getUser();
             $admin_user      = Mage::getModel('admin/user')->load($user->getId());
-            $admin_user->twofactor_google_secret = $params['google_secret'];
-            $admin_user->save(); // TODO should we save this encrypted?
+            $admin_user->twofactor_google_secret = Mage::helper('core')->encrypt($params['google_secret']);
+            $admin_user->save(); 
+                // TODO should we save this encrypted? 
+                // -- http://stackoverflow.com/questions/8576277/decrypt-use-config-values-stored-as-config-backend-encrypted-in-magento
             Mage::log("google secret saved", 0, "two_factor_auth.log");
 
             // redirect back to login, now they'll need to enter the code.

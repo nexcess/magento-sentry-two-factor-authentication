@@ -59,7 +59,8 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
         $admin_user      = Mage::getModel('admin/user')->load($user->getId());
 
         $ga = new PHPGangsta_GoogleAuthenticator();
-        return $ga->verifyCode($admin_user->twofactor_google_secret, $code, 2);  // TODO make time window configurable?
+        $secret = Mage::helper('core')->decrypt($admin_user->twofactor_google_secret);
+        return $ga->verifyCode($secret, $code, 1);
     }
 
 
