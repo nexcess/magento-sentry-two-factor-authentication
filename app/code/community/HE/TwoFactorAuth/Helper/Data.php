@@ -17,7 +17,7 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function isDisabled(){
 
-        $tfaFlag = MAGENTO_ROOT . '/tfaoff.flag';
+        $tfaFlag = Mage::getBaseDir('base') . '/tfaoff.flag';
 
         if (file_exists($tfaFlag)) {
             Mage::log("isDisabled - Found tfaoff.flag, TFA disabled.", 0, "two_factor_auth.log");
