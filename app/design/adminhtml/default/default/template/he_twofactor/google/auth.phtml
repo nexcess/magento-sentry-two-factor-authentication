@@ -40,7 +40,8 @@
         $secret = $g2fa->generateSecret();
         $qr_url = $g2fa->generateQRCodeUrl($secret, $user->getUsername());
         $msg = Mage::helper('he_twofactorauth')->__('You must set up your Google Authenticator app using the QR code below.');
-        Mage::getSingleton('adminhtml/session')->addNotice($msg);        
+        Mage::getSingleton('adminhtml/session')->addNotice($msg);  
+        // TODO figure out message weirdness      
     }
 
 ?>
