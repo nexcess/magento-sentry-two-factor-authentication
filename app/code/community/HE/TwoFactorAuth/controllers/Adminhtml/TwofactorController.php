@@ -93,9 +93,7 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             $admin_user      = Mage::getModel('admin/user')->load($user->getId());
             $admin_user->twofactor_google_secret = Mage::helper('core')->encrypt($params['google_secret']);
             $admin_user->save(); 
-                // TODO should we save this encrypted? 
-                // -- http://stackoverflow.com/questions/8576277/decrypt-use-config-values-stored-as-config-backend-encrypted-in-magento
-            Mage::log("google secret saved", 0, "two_factor_auth.log");
+             Mage::log("google secret saved", 0, "two_factor_auth.log");
 
             // redirect back to login, now they'll need to enter the code.
             $msg = Mage::helper('he_twofactorauth')->__("Please enter your input code.");
@@ -105,11 +103,19 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         }
         else { 
             // check the key
+
+            // Test to make sure the parameter exists and remove any spaces
+            if (array_key_exists('input_code', $params)) {
+                $gcode = str_replace(' ', '', $params['input_code']);
+            } else {
+                $gcode='';
+            }
+
             // TODO add better error checking and flow!
-            if ((strlen($params['input_code']) == 6) && (is_numeric($params['input_code']))) { 
-                Mage::log("Checking input code '" . $params['input_code'] ."'", 0, "two_factor_auth.log");
+            if ((strlen($gcode) == 6) && (is_numeric($gcode))) { 
+                Mage::log("Checking input code '" . $gcode ."'", 0, "two_factor_auth.log");
                 $g2fa = Mage::getModel("he_twofactorauth/validate_google");
-                $goodCode = $g2fa->validateCode($params['input_code']);
+                $goodCode = $g2fa->validateCode($gcode);
                 if ($goodCode) { 
                     $msg = Mage::helper('he_twofactorauth')->__("Valid code entered");
                     Mage::getSingleton('adminhtml/session')->addSuccess($msg);
@@ -122,6 +128,11 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
                     $this->_redirect('adminhtml/twofactor/google');
                     return $this;
                 }
+            } else {
+                $msg = Mage::helper('he_twofactorauth')->__("Invalid code entered");
+                Mage::getSingleton('adminhtml/session')->addError($msg);
+                $this->_redirect('adminhtml/twofactor/google');
+                return $this;
             }
         }
     }
