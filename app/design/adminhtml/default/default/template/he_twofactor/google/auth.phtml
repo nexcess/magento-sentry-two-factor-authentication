@@ -32,8 +32,8 @@
     $secret          = $admin_user->getTwofactorGoogleSecret();
 
     if (!empty($secret)) {
-        $msg = Mage::helper('he_twofactorauth')->__('Please complete the Google two factor authentication');
-        Mage::getSingleton('adminhtml/session')->addNotice($msg);
+        // $msg = Mage::helper('he_twofactorauth')->__('Please complete the Google two factor authentication');
+        // Mage::getSingleton('adminhtml/session')->addNotice($msg);
     }
     else { 
         $g2fa = Mage::getModel("he_twofactorauth/validate_google");
