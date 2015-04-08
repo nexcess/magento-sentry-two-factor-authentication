@@ -8,11 +8,13 @@ ul.tabs a.sentry-settings span,ul.tabs a.sentry-settings:hover span{background-s
 .sentry-intro{margin-bottom:.5rem;background-image:url(../images/he_nexcess_logos.gif);background-repeat:no-repeat;background-position:right top;min-height:60px;}
 .sentry-intro .line{}
 
+.sentry-intro,.sentry-banner{min-width:975px;}
+
 .sentry-banner{border:solid .1rem #dbdbdb;background-color:#fbfbfb;}
 .sentry-banner .sentry-ribbon{position:relative;background-color:#2e2e2e;color:#dadada;padding:.7rem;padding-left:40px;padding-bottom:0;border-bottom:solid .35rem #2e2e2e;margin-bottom:.5rem;font-size:.8rem;
 background-image:url(../images/icon_sentry.gif);background-position:9px bottom;background-repeat:no-repeat;background-size:23px;}
-.sentry-banner .sentry-ribbon .btns{position:absolute;right:.4rem;top:.75rem;bottom:0;margin:auto;height:100%;max-width:30%;text-align:right;}
-.sentry-banner .sentry-ribbon .btns .btn{display:inline-block;margin-right:.5rem;padding:.2rem 2rem;border-radius:3px;color:#fff;background-color:green;box-shadow:-1px 1px 3px rgba(0,0,0,.9);
+.sentry-banner .sentry-ribbon .btns{position:absolute;right:.4rem;top:0;bottom:0;margin:auto;height:100%;max-width:30%;text-align:right;white-space:nowrap;min-width:300px;}
+.sentry-banner .sentry-ribbon .btns .btn{font-size:.8rem;display:inline-block;margin-right:.5rem;margin-top:.45rem;padding:.2rem 2rem;border-radius:3px;color:#fff;background-color:green;box-shadow:-1px 1px 3px rgba(0,0,0,.9);
 background: rgb(36,160,206);
 background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI0YTBjZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMzdlYWMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
 background: -moz-linear-gradient(top,  rgba(36,160,206,1) 0%, rgba(3,126,172,1) 100%);
