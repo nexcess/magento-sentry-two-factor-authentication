@@ -23,7 +23,7 @@
 					<sort_order>0</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
+					<show_in_store>0</show_in_store>
                 </hint>
                 <info>
                     <logging translate="label"/>
@@ -118,7 +118,7 @@
                         <li>For information on setting up a new integration, please read
                         <a href="https://www.duosecurity.com/docs/getting_started">Getting Started with Duo Security</a>
                         </ul></p>
-                        <p>When setting up a new integration select <strong>"Web SDK"</strong> as the type of integration.</p>
+                        <p>When setting up a new integration select either <strong>"Magento"</strong> or <strong>"Web SDK"</strong> as the type of integration.</p>
                         <p><strong>NOTE!</strong> You must have a DUO account before enabling this module.<br/><p>
                         ]]>
                     </comment>

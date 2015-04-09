@@ -6,4 +6,5 @@ app/design/adminhtml/default/default/template/he_twofactor     	app/design/admin
 js/he_twofactor							js/he_twofactor
 lib/Duo								lib/Duo
 lib/GoogleAuthenticator				lib/GoogleAuthenticator
-app/etc/modules/HE_TwoFactorAuth.xml       			app/etc/modules/HE_TwoFactorAuth.xml 
+app/etc/modules/HE_TwoFactorAuth.xml      app/etc/modules/HE_TwoFactorAuth.xml
+app/locale/en_US/HE_TwoFactorAuth.csv     app/locale/en_US/HE_TwoFactorAuth.csv
