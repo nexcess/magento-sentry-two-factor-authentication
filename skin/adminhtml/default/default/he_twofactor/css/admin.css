@@ -1,0 +1,38 @@
+li.sentry-section dl:first-child dt.label{}
+
+ul.tabs a.sentry-item span,
+ul.tabs a.sentry-item:hover span{background-repeat:no-repeat;background-position:4px center;padding-left:1.5rem;background-color:#2e2e2e;color:#fff;}
+
+ul.tabs a.sentry-settings span,ul.tabs a.sentry-settings:hover span{background-size:17px;background-image:url(../images/icon_lock_left_menu.svg);}
+
+.sentry-intro{margin-bottom:.5rem;background-image:url(../images/he_nexcess_logos.gif);background-repeat:no-repeat;background-position:right top;min-height:60px;}
+.sentry-intro .line{}
+
+.sentry-intro,.sentry-banner{min-width:975px;}
+
+.sentry-banner{border:solid .1rem #dbdbdb;background-color:#fbfbfb;}
+.sentry-banner .sentry-ribbon{position:relative;background-color:#2e2e2e;color:#dadada;padding:.7rem;padding-left:40px;padding-bottom:0;border-bottom:solid .35rem #2e2e2e;margin-bottom:.5rem;font-size:.8rem;
+background-image:url(../images/icon_sentry.gif);background-position:9px bottom;background-repeat:no-repeat;background-size:23px;}
+.sentry-banner .sentry-ribbon .btns{position:absolute;right:.4rem;top:0;bottom:0;margin:auto;height:100%;max-width:30%;text-align:right;white-space:nowrap;min-width:300px;}
+.sentry-banner .sentry-ribbon .btns .btn{font-size:.8rem;display:inline-block;margin-right:.5rem;margin-top:.45rem;padding:.2rem 2rem;border-radius:3px;color:#fff;background-color:green;box-shadow:-1px 1px 3px rgba(0,0,0,.9);
+background: rgb(36,160,206);
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI0YTBjZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMzdlYWMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+background: -moz-linear-gradient(top,  rgba(36,160,206,1) 0%, rgba(3,126,172,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(36,160,206,1)), color-stop(100%,rgba(3,126,172,1)));
+background: -webkit-linear-gradient(top,  rgba(36,160,206,1) 0%,rgba(3,126,172,1) 100%);
+background: -o-linear-gradient(top,  rgba(36,160,206,1) 0%,rgba(3,126,172,1) 100%);
+background: -ms-linear-gradient(top,  rgba(36,160,206,1) 0%,rgba(3,126,172,1) 100%);
+background: linear-gradient(to bottom,  rgba(36,160,206,1) 0%,rgba(3,126,172,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24a0ce', endColorstr='#037eac',GradientType=0 );
+}
+.sentry-banner .sentry-ribbon .btns .btn:last-child{margin-right:0;}
+.sentry-banner .sentry-ribbon .btns .btn:hover{text-decoration:none;}
+.sentry-banner .sentry-ribbon strong{color:#fff;text-transform:uppercase;font-size:1.5rem;font-weight:normal;letter-spacing:-1px;margin-right:.3rem;}
+.sentry-banner p{padding:0 .5rem;}
+
+.sentry-intro .line, .sentry-banner p{font-family:"Arial Regular", Arial, Helvetica, sans-serif;font-size:.8rem;}
+.sentry-intro a, .sentry-banner a,
+.sentry-intro a:visited, .sentry-banner a:visited
+{text-decoration:none;color:#0015dc;font-weight:bold;}
+.sentry-intro a:hover, .sentry-banner a:hover
+{text-decoration:underline;}

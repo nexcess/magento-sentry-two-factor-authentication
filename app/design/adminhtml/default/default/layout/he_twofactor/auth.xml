@@ -4,6 +4,7 @@
   <default>
     <reference name="head">
         <action method="addJs"><script>he_twofactor/adminpanel.js</script></action>
+        <action method="addItem"><type>skin_css</type><name>he_twofactor/css/admin.css</name></action>
     </reference>
   </default>
 

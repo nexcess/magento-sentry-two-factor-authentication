@@ -1,0 +1,49 @@
+<?php 
+	//gets module version from config.xml
+	$_moduleVersion=$this->getTwoFactorAuthVersion();
+	//links from translate CSV file
+	$_heLink=$this->__('human-element-link');
+	$_nexcessLink=$this->__('nexcess-link');
+	$_docsLink=$this->__('docs-link');
+	$_submitBugLink=$this->__('submit-bug-link');
+	$_multiAuthLink=$this->__('multi-auth-link');
+	$_mageSupportLink=$this->__('mage-support-link');
+	$_contactLink=$this->__('contact-link');
+	//remove http... from start of link so it can be used as a label in the paragraph
+	function simplifyLinkLabel($link){
+		$link=str_replace('https://www.', '', $link);
+		$link=str_replace('http://www.', '', $link);
+		return $link;
+	}
+?>
+
+<div class="sentry-intro">
+	<div class="line">
+		<?php echo $this->__('Sentry Two-Factor Authentication for Magento v%s', $_moduleVersion); ?>
+	</div>
+	<div class="line">
+		<?php echo $this->__('Developed as a Partnership between <a href="%s" target="_blank">Human Element</a> and <a href="%s" target="_blank">Nexcess</a> Hosting',$_heLink,$_nexcessLink); ?>
+	</div>
+	<div class="line"><a href="<?php echo $_docsLink; ?>" target="_blank">
+		<?php echo $this->__('View Extension Documentation'); ?>
+	</a></div>
+</div>
+<div class="sentry-banner">
+	<div class="sentry-ribbon">
+		<?php echo $this->__('<strong>Sentry</strong> Two-factor Authentication for Magento'); ?>
+		<div class="btns">
+			<a class="btn bug" href="<?php echo $_submitBugLink; ?>" target="_blank"><?php echo $this->__('Submit a Bug'); ?></a>
+			<a class="btn support" href="<?php echo $_mageSupportLink; ?>" target="_blank"><?php echo $this->__('Get Support'); ?></a>
+		</div>
+	</div>
+	<p>Multifactor authentication provides an additional check when logging into your Magento administration system. 
+		Once configured, an additional challenge screen is added to the admin login process. This screen will interact 
+		with an additional method of contact, usually a cellphone or email, that will prove that the user attempting login is the real user.</p>
+	<p>For more information, Wikipedia has a good introduction to <a href="<?php echo $_multiAuthLink; ?>" target="_blank">Multifactor Authentication</a>.</p>
+	<p>NOTE - when using multifactor authentication it is highly advised that each admin user have their own account.</p>
+	<p>To find out more about Human Element and <a href="<?php echo $_mageSupportLink ?>" target="_blank">Magento Support Services</a>, please visit our website at 
+		<a href="<?php echo $_heLink ?>" target="_blank"><?php echo simplifyLinkLabel($_heLink); ?></a> 
+		or fill in our <a href="<?php echo $_contactLink; ?>" target="_blank">contact form</a>. 
+		To find out more about Nexcess Hosting, visit their website at 
+		<a href="<?php echo $_nexcessLink; ?>" target="_blank"><?php echo simplifyLinkLabel($_nexcessLink); ?></a>. </p>
+</div>

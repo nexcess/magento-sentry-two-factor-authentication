@@ -72,8 +72,29 @@
                 </he_twofactor>
             </updates>
         </layout>
+        
+       	<translate>
+			<modules>
+				<HE_TwoFactorAuth>
+					<files>
+						<default>HE_TwoFactorAuth.csv</default>
+					</files>
+				</HE_TwoFactorAuth>
+			</modules>
+        </translate>
 
     </adminhtml>
+    <frontend>
+    		<translate>
+            <modules>
+                <HE_TwoFactorAuth>
+                    <files>
+                        <default>HE_TwoFactorAuth.csv</default>
+                    </files>
+                </HE_TwoFactorAuth>
+            </modules>
+        </translate>
+    	</frontend>
     <default>
         <he2faconfig>
             <providers>

@@ -2,13 +2,15 @@
 <config>
     <tabs>
         <he2faconfig translate="label" module="he_twofactorauth">
-            <label>HE Multifactor Login</label>
+            <label>Human Element - Sentry</label>
+            <class>sentry-section</class>
             <sort_order>99999</sort_order>
         </he2faconfig>
     </tabs>
     <sections>
         <he2faconfig translate="label" module="he_twofactorauth">
-            <label>Configuration</label>
+            <label>Two-Factor Auth Settings</label>
+            <class>sentry-item sentry-settings</class>
             <tab>he2faconfig</tab>
             <!-- frontend_type>text</frontend_type -->
             <sort_order>20</sort_order>
@@ -16,6 +18,13 @@
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
             <groups>
+            	   	<hint>
+					<frontend_model>he_twofactorauth/adminhtml_system_config_fieldset_hint</frontend_model>
+					<sort_order>0</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+                </hint>
                 <info>
                     <logging translate="label"/>
                     <label>Module Information - Please Read First</label>
