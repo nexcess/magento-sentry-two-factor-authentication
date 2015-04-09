@@ -1,14 +1,17 @@
 <?php 
 	//gets module version from config.xml
 	$_moduleVersion=$this->getTwoFactorAuthVersion();
+	//config init
+	$_configLinks='default/he2falinks/'; $_config=Mage::getConfig();
 	//links from translate CSV file
-	$_heLink=$this->__('human-element-link');
-	$_nexcessLink=$this->__('nexcess-link');
-	$_docsLink=$this->__('docs-link');
-	$_submitBugLink=$this->__('submit-bug-link');
-	$_multiAuthLink=$this->__('multi-auth-link');
-	$_mageSupportLink=$this->__('mage-support-link');
-	$_contactLink=$this->__('contact-link');
+	$_heLink=$_config->getNode($_configLinks.'human-element-link');
+	$_nexcessLink=$_config->getNode($_configLinks.'nexcess-link');
+	$_docsLink=$_config->getNode($_configLinks.'docs-link');
+	$_submitBugLink=$_config->getNode($_configLinks.'submit-bug-link');
+	$_multiAuthLink=$_config->getNode($_configLinks.'multi-auth-link');
+	$_mageSupportLink=$_config->getNode($_configLinks.'mage-support-link');
+	$_contactLink=$_config->getNode($_configLinks.'contact-link');
+	
 	//remove http... from start of link so it can be used as a label in the paragraph
 	function simplifyLinkLabel($link){
 		$link=str_replace('https://www.', '', $link);
