@@ -13,12 +13,19 @@
 class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Controller_Action
 {
 
+    public function _construct()
+    {
+        $this->_shouldLog = Mage::helper('he_twofactorauth')->shouldLog();
+        $this->_shouldLogAccess = Mage::helper('he_twofactorauth')->shouldLogAccess();
+        parent::_construct();
+    }
     //need an action per provider so that we can load the correct 2fa form
+
     public function duoAction()
     {
-        //TODO - fix logging settings
-
-        Mage::log("duoAction start", 0, "two_factor_auth.log");
+        if ($this->_shouldLog) {
+            Mage::log("duoAction start", 0, "two_factor_auth.log");
+        }
         $msg = Mage::helper('he_twofactorauth')->__('Please complete the DUO two factor authentication');
         Mage::getSingleton('adminhtml/session')->addNotice($msg);
 
@@ -32,7 +39,17 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
      */
     public function verifyAction()
     {
-        Mage::log("verifyAction start", 0, "two_factor_auth.log");
+        if ($this->_shouldLog) {
+            Mage::log("verifyAction start", 0, "two_factor_auth.log");
+        }
+
+        if ($this->_shouldLogAccess) {
+            $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+            $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUsername();
+
+            Mage::log("TFA Verify attempt for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+        }
+
         $provider = Mage::helper('he_twofactorauth')->getProvider();
 
         $verifyProcess = '_verify' . ucfirst($provider);
@@ -41,7 +58,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             $this->$verifyProcess();
         } else {
             Mage::helper('he_twofactorauth')->disable2FA();
-            Mage::log("verifyAction - Unsupported provider $provider. Two factor Authentication is disabled", 0, "two_factor_auth.log");
+            if ($this->_shouldLog) {
+                Mage::log("verifyAction - Unsupported provider $provider. Two factor Authentication is disabled", 0, "two_factor_auth.log");
+            }
         }
         return $this;
     }
@@ -53,7 +72,16 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         $validate = Mage::getModel('he_twofactorauth/validate_duo');
 
         if ($validate->verifyResponse($duoSigResp) === false) {
-            Mage::log("verifyAction fail", 0, "two_factor_auth.log");
+            if ($this->_shouldLog) {
+                Mage::log("verifyAction fail", 0, "two_factor_auth.log");
+            }
+
+            if ($this->_shouldLogAccess) {
+                $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+                $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUsername();
+
+                Mage::log("TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+            }
 
             //TODO - make status message area on template
             $msg = Mage::helper('he_twofactorauth')->__(
@@ -65,11 +93,82 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             return $this;
         }
 
-        Mage::log("verifyAction - Duo Validated", 0, "two_factor_auth.log");
+        if ($this->_shouldLog) {
+            Mage::log("verifyAction - Duo Validated", 0, "two_factor_auth.log");
+        }
 
         Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE);
         $this->_redirect('*');
         return $this;
+    }
+
+    private function _verifyGoogle()
+    {
+        if ($this->_shouldLog) {
+            Mage::log("verifyAction - start Google validate", 0, "two_factor_auth.log");
+        }
+        $params =  $this->getRequest()->getParams();
+
+        // save the user's shared secret 
+        if ((!empty($params['google_secret'])) && (strlen($params['google_secret']) == 16)) { 
+            $user            = Mage::getSingleton('admin/session')->getUser();
+            $admin_user      = Mage::getModel('admin/user')->load($user->getId());
+            $admin_user->twofactor_google_secret = Mage::helper('core')->encrypt($params['google_secret']);
+            $admin_user->save(); 
+                // TODO should we save this encrypted? 
+                // -- http://stackoverflow.com/questions/8576277/decrypt-use-config-values-stored-as-config-backend-encrypted-in-magento
+            if ($this->_shouldLog) {
+                Mage::log("google secret saved", 0, "two_factor_auth.log");
+            }
+
+            // redirect back to login, now they'll need to enter the code.
+            $msg = Mage::helper('he_twofactorauth')->__("Please enter your input code.");
+            Mage::getSingleton('adminhtml/session')->addError($msg);
+            $this->_redirect('adminhtml/twofactor/google');
+            return $this;
+        } else {
+            // check the key
+            // TODO add better error checking and flow!
+
+            if (array_key_exists('input_code', $params)) {
+                $gcode = str_replace(' ', '', $params['input_code']);
+            } else {
+                $gcode="";
+            }
+
+            if ((strlen($gcode) == 6) && (is_numeric($gcode))) {
+                if ($this->_shouldLog) {
+                    Mage::log("Checking input code '" . $gcode ."'", 0, "two_factor_auth.log");
+                }
+                $g2fa = Mage::getModel("he_twofactorauth/validate_google");
+                $goodCode = $g2fa->validateCode($gcode);
+                if ($goodCode) { 
+                    $msg = Mage::helper('he_twofactorauth')->__("Valid code entered");
+                    Mage::getSingleton('adminhtml/session')->addSuccess($msg);
+                    Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE);
+                    $this->_redirect('*');
+                    return $this;
+                } else {
+
+                    if ($this->_shouldLogAccess) {
+                        $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+                        $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
+
+                        Mage::log("TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+                    }
+
+                    $msg = Mage::helper('he_twofactorauth')->__("Invalid code entered");
+                    Mage::getSingleton('adminhtml/session')->addError($msg);
+                    $this->_redirect('adminhtml/twofactor/google');
+                    return $this;
+                }
+            } else {
+                $msg = Mage::helper('he_twofactorauth')->__("Invalid code entered");
+                Mage::getSingleton('adminhtml/session')->addError($msg);
+                $this->_redirect('adminhtml/twofactor/google');
+                return $this;
+            }
+        }
     }
 
     /***
@@ -78,7 +177,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
      */
     public function validateAction()
     {
-        Mage::log("validateAction start", 0, "two_factor_auth.log");
+        if ($this->_shouldLog) {
+            Mage::log("validateAction start", 0, "two_factor_auth.log");
+        }
         $provider = Mage::helper('he_twofactorauth')->getProvider();
 
         $validateProcess = '_validate' . ucfirst($provider);
@@ -87,19 +188,25 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             $this->$validateProcess();
         } else {
             Mage::helper('he_twofactorauth')->disable2FA();
-            Mage::log("validateAction - Unsupported provider $provider. Two factor Authentication is disabled", 0, "two_factor_auth.log");
+            if ($this->_shouldLog) {
+                Mage::log("validateAction - Unsupported provider $provider. Two factor Authentication is disabled", 0, "two_factor_auth.log");
+            }
         }
         return $this;
     }
 
     private function _validateDuo()
     {
-        Mage::log("validateAction starting", 0, "two_factor_auth.log");
+        if ($this->_shouldLog) {
+            Mage::log("validateAction starting", 0, "two_factor_auth.log");
+        }
 
         $validate = Mage::getModel('he_twofactorauth/validate_duo_request');
 
         if ($validate->ping() == false) {
-            Mage::log("validateAction ping fail - can not communicate with Duo auth server", 0, "two_factor_auth.log");
+            if ($this->_shouldLog) {
+                Mage::log("validateAction ping fail - can not communicate with Duo auth server", 0, "two_factor_auth.log");
+            }
 
             $msg = Mage::helper('he_twofactorauth')->__(
                 'Can not connect to authentication server. Two Factor Authentication has been disabled.'
@@ -107,7 +214,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             Mage::getSingleton('adminhtml/session')->addError($msg);
 
         } elseif ($validate->check() == false) {
-            Mage::log("validateAction check fail - can not communicate with Duo auth server", 0, "two_factor_auth.log");
+            if ($this->_shouldLog) {
+                Mage::log("validateAction check fail - can not communicate with Duo auth server", 0, "two_factor_auth.log");
+            }
 
             $msg = Mage::helper('he_twofactorauth')->__(
                 'Can not connect to authentication server. Two Factor Authentication has been disabled.'

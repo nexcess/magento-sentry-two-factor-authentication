@@ -5,6 +5,11 @@ require_once (Mage::getBaseDir('lib') . DS . 'GoogleAuthenticator' . DS . 'PHPGa
 class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Validate
 {
 
+    public function __construct()
+    {
+        $this->_shouldLog = Mage::helper('he_twofactorauth')->shouldLog();
+    }
+
     /*
      * HOTP - counter based
      * TOTP - time based
@@ -12,7 +17,9 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
     public function getToken($username, $tokentype = "TOTP")
     {
         $token = $this->setUser($username, $tokentype);
-        Mage::log("token = " . var_export($token, true));
+        if ($this->_shouldLog) {
+            Mage::log("token = " . var_export($token, true));
+        }
 
         $user = Mage::getModel('admin/user')->loadByUsername($username);
         $user->setTwofactorauthToken($token);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
@@ -9,18 +10,24 @@
  * https://www.duosecurity.com/docs/authap
  */
 
-class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract {
+class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract
+{
 
-    public function __construct(){
-        $this->_provider= Mage::getStoreConfig('he2faconfig/control/provider');
+    public function __construct()
+    {
+        $this->_provider = Mage::getStoreConfig('he2faconfig/control/provider');
+        $this->_logging = Mage::getStoreConfig('he2faconfig/control/logging');
+        $this->_logAccess = Mage::getStoreConfig('he2faconfig/control/logaccess');
     }
 
-    public function isDisabled(){
-
+    public function isDisabled()
+    {
         $tfaFlag = Mage::getBaseDir('base') . '/tfaoff.flag';
 
         if (file_exists($tfaFlag)) {
-            Mage::log("isDisabled - Found tfaoff.flag, TFA disabled.", 0, "two_factor_auth.log");
+            if ($this->shouldLog()) {
+                Mage::log("isDisabled - Found tfaoff.flag, TFA disabled.", 0, "two_factor_auth.log");
+            }
             return true;
         }
 
@@ -28,7 +35,7 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract {
             return true;
         }
 
-        $method = Mage::getSingleton('he_twofactorauth/validate_'.$this->_provider) ;
+        $method = Mage::getSingleton('he_twofactorauth/validate_' . $this->_provider);
 
         if (!$method) {
             return true;
@@ -37,13 +44,25 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract {
         return !$method->isValid();
     }
 
-    public function getProvider(){
+    public function getProvider()
+    {
         return $this->_provider;
     }
 
-    public function disable2FA(){
-        Mage::getModel('core/config')->
-            saveConfig('he2faconfig/control/provider', 'disabled');
+
+    public function shouldLog()
+    {
+        return $this->_logging;
+    }
+
+    public function shouldLogAccess()
+    {
+        return $this->_logAccess;
+    }
+
+    public function disable2FA()
+    {
+        Mage::getModel('core/config')->saveConfig('he2faconfig/control/provider', 'disabled');
         Mage::app()->getStore()->resetConfig();
     }
 }

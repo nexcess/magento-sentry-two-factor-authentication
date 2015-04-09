@@ -29,13 +29,16 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
             $msg = $this->_helper->__('Duo Twofactor Authentication is missing one or more settings. Please configure HE Two Factor Authentication.');
             Mage::getSingleton('adminhtml/session')->addError($msg);
         }
+
+        $this->_shouldLog = Mage::helper('he_twofactorauth')->shouldLog();
     }
 
     public function signRequest($user)
     {
-        Mage::log("in signRequest with $user", 0, "two_factor_auth.log");
+        if ($this->_shouldLog) {
+            Mage::log("in signRequest with $user", 0, "two_factor_auth.log");
+        }
         $sig_request = Duo::signRequest($this->_ikey, $this->_skey, $this->_akey, $user);
-        Mage::log(print_r($sig_request, true), 0, "two_factor_auth.log");
 
         return $sig_request;
     }
@@ -73,11 +76,15 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
         //let the user know the status
         if ($status==HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS) {
             //Mage::getSingleton('adminhtml/session')->addSuccess($msg);
-            Mage::log("isValid - $msg.", Zend_Log::ERR, "two_factor_auth.log");
+            if ($this->_shouldLog) {
+                Mage::log("isValid - $msg.", Zend_Log::ERR, "two_factor_auth.log");
+            }
             $newMode=$this->_helper->__('VALID');
         } else {
             Mage::getSingleton('adminhtml/session')->addError($msg);
-            Mage::log("isValid - $msg.", Zend_Log::INFO, "two_factor_auth.log");
+            if ($this->_shouldLog) {
+                Mage::log("isValid - $msg.", Zend_Log::INFO, "two_factor_auth.log");
+            }
             $newMode=$this->_helper->__('NOT VALID');
         }
 

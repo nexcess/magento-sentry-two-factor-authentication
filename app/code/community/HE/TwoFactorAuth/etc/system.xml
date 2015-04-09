@@ -59,6 +59,34 @@
                                 <![CDATA[Select the security provider for authentication]]>
                             </comment>
                         </provider>
+
+                        <logaccess>
+                            <label>Enable access logging</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <comment>
+                                <![CDATA[When enabled, the module will log all access attempts and failures to a file named
+                                two_factor_auth.log in Magento's log directory]]>
+                            </comment>
+                        </logaccess>
+
+                        <logging>
+                            <label>Enable debug logging</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <comment>
+                                <![CDATA[When enabled, the module will write debugging information to a file named
+                                two_factor_auth.log in Magento's log directory]]>
+                            </comment>
+                        </logging>
+
+
                     </fields>
                 </control>
                 <duo translate="label">
@@ -88,7 +116,7 @@
                     <fields>
                         <ikey>
                             <label>Integration Key</label>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>obscure</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
@@ -100,7 +128,7 @@
                         </ikey>
                         <skey>
                             <label>Secret Key</label>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>obscure</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
