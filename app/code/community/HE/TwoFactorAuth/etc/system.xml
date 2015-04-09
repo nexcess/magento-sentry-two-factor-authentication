@@ -184,6 +184,28 @@
                         </validated>
                     </fields>
                 </duo>
+                <google translate="label">
+                    <label>Google Authenticate</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment>
+                        <![CDATA[<p><strong>About Google Authenticate</strong><br/>
+                        Google Authenticate is a popular two-factor authentication solution. It is free to use, but requires use of a compatible app (freely avaialble from Google). </p>
+
+                        <p>After enabling this option, the first time a user successfully logs in they will be required scan a QR code with their Google Authenticator app in order to setup their Google Authenticator secret code.</p>
+
+                        <p><strong>To login with Google Authenticator, users must use the Google Authenticator app:</strong></p>
+                        <ul>
+                            <li><a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">For iOS</a></li>
+                            <li><a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en">For Android</a></li>
+                        </ul>
+
+                        ]]>
+                    </comment>  
+                </google>
             </groups>
         </he2faconfig>
     </sections>

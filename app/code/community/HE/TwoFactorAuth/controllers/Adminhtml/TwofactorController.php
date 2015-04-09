@@ -33,6 +33,15 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         $this->renderLayout();
     }
 
+
+    public function googleAction()
+    {
+        Mage::log("googleAction start", 0, "two_factor_auth.log");
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+
     /***
      * verify is a generic action, looks at the current config to get provider, then dispatches correct verify method
      * @return $this
@@ -73,19 +82,19 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
 
         if ($validate->verifyResponse($duoSigResp) === false) {
             if ($this->_shouldLog) {
-                Mage::log("verifyAction fail", 0, "two_factor_auth.log");
+                Mage::log("verifyDuo - verifyAction fail", 0, "two_factor_auth.log");
             }
 
             if ($this->_shouldLogAccess) {
                 $ipAddress = Mage::helper('core/http')->getRemoteAddr();
                 $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUsername();
 
-                Mage::log("TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+                Mage::log("verifyDuo - TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
             }
 
             //TODO - make status message area on template
             $msg = Mage::helper('he_twofactorauth')->__(
-                'Two Factor Authentication has failed. Please try again or contact an administrator'
+                'verifyDuo - Two Factor Authentication has failed. Please try again or contact an administrator'
             );
             Mage::getSingleton('adminhtml/session')->addError($msg);
 
@@ -115,10 +124,8 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             $admin_user      = Mage::getModel('admin/user')->load($user->getId());
             $admin_user->twofactor_google_secret = Mage::helper('core')->encrypt($params['google_secret']);
             $admin_user->save(); 
-                // TODO should we save this encrypted? 
-                // -- http://stackoverflow.com/questions/8576277/decrypt-use-config-values-stored-as-config-backend-encrypted-in-magento
             if ($this->_shouldLog) {
-                Mage::log("google secret saved", 0, "two_factor_auth.log");
+                Mage::log("verifyGoogle - google secret saved", 0, "two_factor_auth.log");
             }
 
             // redirect back to login, now they'll need to enter the code.
@@ -126,19 +133,20 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             Mage::getSingleton('adminhtml/session')->addError($msg);
             $this->_redirect('adminhtml/twofactor/google');
             return $this;
-        } else {
+        }
+        else { 
             // check the key
-            // TODO add better error checking and flow!
-
+            // Test to make sure the parameter exists and remove any spaces
             if (array_key_exists('input_code', $params)) {
                 $gcode = str_replace(' ', '', $params['input_code']);
             } else {
-                $gcode="";
+                $gcode='';
             }
 
+            // TODO add better error checking and flow!
             if ((strlen($gcode) == 6) && (is_numeric($gcode))) {
                 if ($this->_shouldLog) {
-                    Mage::log("Checking input code '" . $gcode ."'", 0, "two_factor_auth.log");
+                    Mage::log("verifyGoogle - checking input code '" . $gcode ."'", 0, "two_factor_auth.log");
                 }
                 $g2fa = Mage::getModel("he_twofactorauth/validate_google");
                 $goodCode = $g2fa->validateCode($gcode);
@@ -149,14 +157,12 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
                     $this->_redirect('*');
                     return $this;
                 } else {
-
                     if ($this->_shouldLogAccess) {
                         $ipAddress = Mage::helper('core/http')->getRemoteAddr();
                         $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
 
-                        Mage::log("TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+                        Mage::log("verifyGoogle - TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
                     }
-
                     $msg = Mage::helper('he_twofactorauth')->__("Invalid code entered");
                     Mage::getSingleton('adminhtml/session')->addError($msg);
                     $this->_redirect('adminhtml/twofactor/google');
@@ -222,11 +228,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
                 'Can not connect to authentication server. Two Factor Authentication has been disabled.'
             );
             Mage::getSingleton('adminhtml/session')->addError($msg);
-
         }
 
         $this->_redirect('*');
         return $this;
     }
-
 }

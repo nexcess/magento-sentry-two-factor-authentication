@@ -123,8 +123,8 @@ class HE_TwoFactorAuth_Model_Observer
             // set we are processing 2f login
             Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_PROCESSING);
 
-            //TODO - change to config setting
-            $twoFactAuthPage = Mage::helper("adminhtml")->getUrl("adminhtml/twofactor/duo");
+            $provider = Mage::helper('he_twofactorauth')->getProvider();
+            $twoFactAuthPage = Mage::helper("adminhtml")->getUrl("adminhtml/twofactor/$provider");
 
             //disable the dispatch for now
             $request = Mage::app()->getRequest();
@@ -141,6 +141,65 @@ class HE_TwoFactorAuth_Model_Observer
 
             $response->setRedirect($twoFactAuthPage)->sendResponse();
             exit();
+        }
+    }
+
+    /* 
+     * Add a fieldset and field to the admin edit user form
+     * in order to allow selective clearing of a users shared secret (google)
+     */
+
+    public function googleClearSecretCheck(Varien_Event_Observer $observer) {
+        $block = $observer->getEvent()->getBlock();
+
+        if (!isset($block)) { return $this; }
+
+        if ($block->getType() == 'adminhtml/permissions_user_edit_form') {
+
+            // check that google is set for twofactor authentication            
+            if (Mage::helper('he_twofactorauth')->getProvider() == 'google') { 
+                //create new custom fieldset 'website'
+                $form = $block->getForm();
+                $fieldset = $form->addFieldset('website_field', array(
+                        'legend' => 'Google Authenticator',
+                        'class' => 'fieldset-wide'
+                    )
+                );
+
+                $fieldset->addField('checkbox', 'checkbox', array(
+                    'label'     => Mage::helper('he_twofactorauth')->__('Reset Google Authenticator'),
+                    'name'      => 'clear_google_secret',
+                    'checked' => false,
+                    'onclick' => "",
+                    'onchange' => "",
+                    'value'  => '1',
+                    'disabled' => false,
+                    'after_element_html' => '<small>Check this and save to reset this user\'s Google Authenticator.<br />They will need to use the QR code to reconnect their device after their next successful login.</small>',
+                    'tabindex' => 1
+                ));                
+            }
+        }
+    }
+
+
+    /*
+     * Clear a user's google secret field if request
+     *
+     */
+    public function googleSaveClear(Varien_Event_Observer $observer) {
+        // check that a user record has been saved
+        
+        // if google is turned and 2fa active...
+        if ((Mage::helper('he_twofactorauth')->getProvider() == 'google') && (!Mage::helper('he_twofactorauth')->isDisabled())) { 
+            $params = Mage::app()->getRequest()->getParams();
+            if (isset($params['clear_google_secret'])) {                    
+                if ($params['clear_google_secret'] == 1) { 
+                    $object = $observer->getEvent()->getObject();
+                    $object->twofactor_google_secret = ''; // just clear the secret
+
+                    Mage::log("Clearing google secret for admin user (" . $object->getUsername() . ")", 0, "two_factor_auth.log");
+                }  
+            }         
         }
     }
 }

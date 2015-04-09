@@ -24,6 +24,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php
+
+    // check to see if the user has a secret shared, force QR code if not
+    $user            = Mage::getSingleton('admin/session')->getUser();
+    $admin_user      = Mage::getModel('admin/user')->load($user->getId());
+    $secret          = $admin_user->getTwofactorGoogleSecret();
+
+    if (!empty($secret)) {
+        // $msg = Mage::helper('he_twofactorauth')->__('Please complete the Google two factor authentication');
+        // Mage::getSingleton('adminhtml/session')->addNotice($msg);
+    }
+    else { 
+        $g2fa = Mage::getModel("he_twofactorauth/validate_google");
+        $secret = $g2fa->generateSecret();
+        $qr_url = $g2fa->generateQRCodeUrl($secret, $user->getUsername());
+        $msg = Mage::helper('he_twofactorauth')->__('You must set up your Google Authenticator app using the QR code below.');
+        Mage::getSingleton('adminhtml/session')->addNotice($msg);  
+        // TODO figure out message weirdness      
+    }
+
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
 <head>
@@ -51,14 +72,40 @@
                 <div id="messages">
                     <?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
                 </div>
-                <div class="input-box forgot-password"><label for="email"><?php echo Mage::helper('adminhtml')->__('Security Code'); ?></label><br />
-                    <input type="text" id="input_code" name="input_code" value="" class="required-entry input-text" style="width:461px;" />
-                </div>
+
+                <?php if (!empty($qr_url)) {  // SHOW the QR code so they can set up their authenticator ?>                    
+
+                    <p align='center'><img src="<?php echo $qr_url; ?>" /></p>
+                    <input type="hidden" name="google_secret" value="<?php echo $secret; ?>"    />
+                    <p><strong>To use this QR code in Google Authenticator</strong>:</p>
+                    <ol>
+                        <li>Start the app</li>
+                        <li>Choose 'set up account' from the menu (top right corner)</li>
+                        <li>Choose 'scan a barcode'</li>
+                        <li>Point the camera at the QR code above</li>
+                        <li>When the app tells you the secret has been saved, press the 'Continue' button below.</li>
+                    </ol>
+
+                <?php } else { // ... otherwise, show the input code field ?>
+                    <div class="input-box forgot-password"><label for="input_code"><?php echo Mage::helper('adminhtml')->__('Security Code'); ?></label><br />
+                        <input type="text" id="input_code" name="input_code" value="" class="required-entry input-text" style="width:461px;" />
+                    </div>
+                <?php } ?>
+
                 <?php echo $this->getChildHtml('form.additional.info'); ?>
+
                 <div class="clear"></div>
                 <div class="form-buttons">
                     <a class="left" href="<?php echo $this->getUrl('adminhtml', array('_nosecret' => true)); ?>">&laquo; <?php echo Mage::helper('adminhtml')->__('Back to Login'); ?></a>
-                    <button class="forgot-password" onclick="loginForm.submit()" type="button"><span><span><span><?php echo Mage::helper('adminhtml')->__('Submit Code'); ?></span></span></span></button>
+                    
+                    <?php if (!empty($qr_url)) { ?>                    
+                        <button class="forgot-password" onclick="loginForm.submit()" type="button"><span><span><span><?php echo Mage::helper('adminhtml')->__('Continue'); // TODO need better/clearer wording here? ?></span></span></span></button>
+                    
+                    <?php } else { ?>
+                       
+                        <button class="forgot-password" onclick="loginForm.submit()" type="button"><span><span><span><?php echo Mage::helper('adminhtml')->__('Submit Code'); ?></span></span></span></button>
+
+                    <?php } ?>
                 </div>
             </fieldset>
             <p class="legal"><?php echo Mage::helper('adminhtml')->__('Magento is a trademark of Magento Inc. Copyright &copy; %s Magento Inc.', date('Y')); ?></p>

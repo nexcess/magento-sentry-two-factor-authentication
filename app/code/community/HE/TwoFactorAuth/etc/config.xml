@@ -35,8 +35,20 @@
                         <method>check_twofactor_active</method>
                     </he_twofactorauth_observer_check>
                 </observers>
-            </controller_action_postdispatch_adminhtml>
+            </controller_action_postdispatch_adminhtml>            
         </events>
+
+        <resources>
+            <he_twofactorauth>
+                <setup>
+                    <module>HE_TwoFactorAuth</module>
+                    <class>HE_TwoFactorAuth_Model_Resource_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </he_twofactorauth>
+        </resources>
 
     </global>
 
@@ -63,6 +75,27 @@
                     </he_twofactorauth_observer>
                 </observers>
             </admin_session_user_login_success>
+
+            <adminhtml_block_html_before>
+                <observers>
+                    <he_twofactorauth_observer>
+                        <type>model</type>
+                        <class>he_twofactorauth/observer</class>
+                        <method>googleClearSecretCheck</method>
+                    </he_twofactorauth_observer>
+                </observers>
+            </adminhtml_block_html_before>
+            
+            <model_save_before>
+                <observers>
+                    <he_twofactorauth_observer>
+                         <type>model</type>
+                        <class>he_twofactorauth/observer</class>
+                        <method>googleSaveClear</method>
+                    </he_twofactorauth_observer>
+                </observers>
+            </model_save_before>
+
         </events>
 
         <layout>
