@@ -129,6 +129,15 @@
         </translate>
     	</frontend>
     <default>
+    		<he2falinks>
+    			<human-element-link>http://www.human-element.com</human-element-link>
+			<nexcess-link>https://www.nexcess.net</nexcess-link>
+			<docs-link>http://www.human-element.com/sentry-two-factor-authentication-documentation</docs-link>
+			<submit-bug-link>http://www.human-element.com/sentry-two-factor-authentication-documentation#bugs</submit-bug-link>
+			<multi-auth-link>http://en.wikipedia.org/wiki/Multi-factor_authentication</multi-auth-link>
+			<mage-support-link>http://www.human-element.com/magento-support-page</mage-support-link>
+			<contact-link>http://www.human-element.com/contact/#contact-form</contact-link>
+    		</he2falinks>
         <he2faconfig>
             <providers>
                 <disabled>
