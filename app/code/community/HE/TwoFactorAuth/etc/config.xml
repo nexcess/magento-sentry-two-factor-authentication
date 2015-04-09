@@ -35,7 +35,7 @@
                         <method>check_twofactor_active</method>
                     </he_twofactorauth_observer_check>
                 </observers>
-            </controller_action_postdispatch_adminhtml>            
+            </controller_action_postdispatch_adminhtml>
         </events>
 
         <resources>
@@ -85,11 +85,11 @@
                     </he_twofactorauth_observer>
                 </observers>
             </adminhtml_block_html_before>
-            
+
             <model_save_before>
                 <observers>
                     <he_twofactorauth_observer>
-                         <type>model</type>
+                        <type>model</type>
                         <class>he_twofactorauth/observer</class>
                         <method>googleSaveClear</method>
                     </he_twofactorauth_observer>
@@ -105,20 +105,8 @@
                 </he_twofactor>
             </updates>
         </layout>
-        
-       	<translate>
-			<modules>
-				<HE_TwoFactorAuth>
-					<files>
-						<default>HE_TwoFactorAuth.csv</default>
-					</files>
-				</HE_TwoFactorAuth>
-			</modules>
-        </translate>
 
-    </adminhtml>
-    <frontend>
-    		<translate>
+        <translate>
             <modules>
                 <HE_TwoFactorAuth>
                     <files>
@@ -127,17 +115,29 @@
                 </HE_TwoFactorAuth>
             </modules>
         </translate>
-    	</frontend>
+
+    </adminhtml>
+    <frontend>
+        <translate>
+            <modules>
+                <HE_TwoFactorAuth>
+                    <files>
+                        <default>HE_TwoFactorAuth.csv</default>
+                    </files>
+                </HE_TwoFactorAuth>
+            </modules>
+        </translate>
+    </frontend>
     <default>
-    		<he2falinks>
-    			<human-element-link>http://www.human-element.com</human-element-link>
-			<nexcess-link>https://www.nexcess.net</nexcess-link>
-			<docs-link>http://www.human-element.com/sentry-two-factor-authentication-documentation</docs-link>
-			<submit-bug-link>http://www.human-element.com/sentry-two-factor-authentication-documentation#bugs</submit-bug-link>
-			<multi-auth-link>http://en.wikipedia.org/wiki/Multi-factor_authentication</multi-auth-link>
-			<mage-support-link>http://www.human-element.com/magento-support-page</mage-support-link>
-			<contact-link>http://www.human-element.com/contact/#contact-form</contact-link>
-    		</he2falinks>
+        <he2falinks>
+            <human-element-link>http://www.human-element.com</human-element-link>
+            <nexcess-link>https://www.nexcess.net</nexcess-link>
+            <docs-link>http://www.human-element.com/sentry-two-factor-authentication-documentation</docs-link>
+            <submit-bug-link>http://www.human-element.com/sentry-two-factor-authentication-documentation#bugs</submit-bug-link>
+            <multi-auth-link>http://en.wikipedia.org/wiki/Multi-factor_authentication</multi-auth-link>
+            <mage-support-link>http://www.human-element.com/magento-support-page</mage-support-link>
+            <contact-link>http://www.human-element.com/contact/#contact-form</contact-link>
+        </he2falinks>
         <he2faconfig>
             <providers>
                 <disabled>
@@ -152,12 +152,6 @@
                     <title>Google Authenticator</title>
                     <link>https://support.google.com/accounts/answer/1066447?hl=en</link>
                 </google>
-<!--
-                <authy>
-                    <title>Authy</title>
-                    <link>https://www.authy.com/</link>
-                </authy>
--->
             </providers>
             <duo>
                 <validated>NOT VALID</validated>
