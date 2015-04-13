@@ -56,9 +56,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
 
         if ($this->_shouldLogAccess) {
             $ipAddress = Mage::helper('core/http')->getRemoteAddr();
-            $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUsername();
+            $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
 
-            Mage::log("TFA Verify attempt for admind id $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+            Mage::log("TFA Verify attempt for admin id $adminId from IP $ipAddress", 0, "two_factor_auth.log");
         }
 
         $provider = Mage::helper('he_twofactorauth')->getProvider();
@@ -89,7 +89,7 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
 
             if ($this->_shouldLogAccess) {
                 $ipAddress = Mage::helper('core/http')->getRemoteAddr();
-                $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUsername();
+                $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
 
                 Mage::log("verifyDuo - TFA Verify attempt FAILED for admin id $adminId from IP $ipAddress", 0, "two_factor_auth.log");
             }
