@@ -1,15 +1,24 @@
-# Sentry - Magento Two Factor Authentication Module
+# Sentry
+## Magento Two Factor Authentication Module
 
-## Authors
+### Authors
 - Greg Croasdill, Human Element, Inc http://www.human-element.com
 - Gregg Milligan, Human Element, Inc http://www.human-element.com
 - Aric Watson, Nexcess.net     https://www.nexcess.net/
 
-License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
+### License  
+- GPL  -- https://www.gnu.org/copyleft/gpl.html
 
+### Purpose
+Sentry Two-Factor Authentication will protect your Magento store and customer data by adding an extra check to authenticate your Admin users before allowing them access. Developed as a partnership between the Human Element Magento Development team and Nexcess Hosting, Sentry Two-Factor Authentication for Magento is easy to setup and admin users can quickly login.
+
+### Supported Providers (more to come)
+The following __Two Factor Authentication__ providers are supported at this time.
+#### Duo Security
 For more information on Duo security's API, please see -
 - https://www.duosecurity.com
 
+#### Google Authenticator
 For more information on Google Authenticator, please see -
 - https://github.com/google/google-authenticator/wiki
 - https://support.google.com/accounts/answer/180744?hl=en&ref_topic=1099588
