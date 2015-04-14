@@ -7,3 +7,5 @@ js/he_twofactor							js/he_twofactor
 lib/Duo								lib/Duo
 lib/GoogleAuthenticator				lib/GoogleAuthenticator
 app/etc/modules/HE_TwoFactorAuth.xml      app/etc/modules/HE_TwoFactorAuth.xml
+skin/adminhtml/default/default/he_twofactor  skin/adminhtml/default/default/he_twofactor
+
