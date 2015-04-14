@@ -3,7 +3,6 @@
 c)),f=!0))}})("he_twofactor_ready",window);
 //on document ready
 he_twofactor_ready(function() {
-  console.log('adminpanel.js two-factor authentication extension.');
   //if the provider selector is on this page
   var providerSelect=document.getElementById('he2faconfig_control_provider');
   if(providerSelect!=undefined){
@@ -25,8 +24,19 @@ he_twofactor_ready(function() {
             var wrap=alink.parentNode.parentNode;
             //if the wrap exists
             if(wrap!=undefined){
+            		var hideShowElems=[];
+            		//if this wrap is the entry-edit div (older version of magento has different html)
+            		if(wrap.className.indexOf('entry-edit')!==-1){
+            			//toggle hide/show link and fieldset elements separately because there is no common parent element in this version of magento
+					hideShowElems.push(alink.parentNode);
+					var fieldset=document.getElementById('he2faconfig_'+oVal);
+					hideShowElems.push(fieldset);
+            		}else{
+            			//toggle hiding and showing this wrapper for this version of magento
+            			hideShowElems.push(wrap);
+            		}
               //cache the toggle-able elements for this select item
-              toggleElems.push({'key':oVal,'wrap':wrap,'alink':alink});
+              toggleElems.push({'key':oVal,'wrap':wrap,'alink':alink,'toggleList':hideShowElems});
             }
           }else{
             console.log('"'+oVal+'" does NOT appear as an admin section although it appears in the provider selection dropdown!');
@@ -48,8 +58,11 @@ he_twofactor_ready(function() {
             var dat=toggleElems[w];
             //if this wrap is selected to be visible
             if(dat['key']==selKey){
-              //show the panel
-              dat['wrap'].style.display='block';
+              //show each of the elements in the toggle list
+              for(var i=0;i<dat['toggleList'].length;i++){
+              	//show this toggle list element
+              	dat['toggleList'][i].style.display='block';
+              }
               //if this browser supports classList.contains
               if(dat['wrap'].classList){
                 if(dat['wrap'].classList.contains){
@@ -62,7 +75,12 @@ he_twofactor_ready(function() {
               }
             }else{
               //DESELECTED section... hide the panel wrapper
-              dat['wrap'].style.display='none';
+
+              //hide each of the elements in the toggle list
+              for(var i=0;i<dat['toggleList'].length;i++){
+              	//hide this toggle list element
+              	dat['toggleList'][i].style.display='none';
+              }
             }
           }
         }
