@@ -36,7 +36,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
 
     public function googleAction()
     {
-        Mage::log("googleAction start", 0, "two_factor_auth.log");
+        if ($this->_shouldLog) {
+            Mage::log("googleAction start", 0, "two_factor_auth.log");
+        }
         $this->loadLayout();
         $this->renderLayout();
     }
@@ -54,9 +56,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
 
         if ($this->_shouldLogAccess) {
             $ipAddress = Mage::helper('core/http')->getRemoteAddr();
-            $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUsername();
+            $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
 
-            Mage::log("TFA Verify attempt for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+            Mage::log("TFA Verify attempt for admin id $adminId from IP $ipAddress", 0, "two_factor_auth.log");
         }
 
         $provider = Mage::helper('he_twofactorauth')->getProvider();
@@ -87,9 +89,9 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
 
             if ($this->_shouldLogAccess) {
                 $ipAddress = Mage::helper('core/http')->getRemoteAddr();
-                $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUsername();
+                $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
 
-                Mage::log("verifyDuo - TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+                Mage::log("verifyDuo - TFA Verify attempt FAILED for admin id $adminId from IP $ipAddress", 0, "two_factor_auth.log");
             }
 
             //TODO - make status message area on template
@@ -105,6 +107,13 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         if ($this->_shouldLog) {
             Mage::log("verifyAction - Duo Validated", 0, "two_factor_auth.log");
         }
+        if ($this->_shouldLogAccess) {
+            $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+            $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
+
+            Mage::log("verifyAction - TFA Verify attempt SUCCEEDED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+        }
+
 
         Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE);
         $this->_redirect('*');
@@ -124,8 +133,11 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
             $admin_user      = Mage::getModel('admin/user')->load($user->getId());
             $admin_user->twofactor_google_secret = Mage::helper('core')->encrypt($params['google_secret']);
             $admin_user->save(); 
-            if ($this->_shouldLog) {
-                Mage::log("verifyGoogle - google secret saved", 0, "two_factor_auth.log");
+            if (($this->_shouldLog) || ($this->_shouldLogAccess)) {
+                $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+                $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
+
+                Mage::log("verifyGoogle - new google secret saved for admin ID $adminId, IP: $ipAddress", 0, "two_factor_auth.log");
             }
 
             // redirect back to login, now they'll need to enter the code.
@@ -151,6 +163,13 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
                 $g2fa = Mage::getModel("he_twofactorauth/validate_google");
                 $goodCode = $g2fa->validateCode($gcode);
                 if ($goodCode) { 
+                    if ($this->_shouldLogAccess) {
+                        $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+                        $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
+
+                        Mage::log("verifyGoogle - TFA Verify attempt SUCCESSFUL for admin id $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+                    }
+
                     $msg = Mage::helper('he_twofactorauth')->__("Valid code entered");
                     Mage::getSingleton('adminhtml/session')->addSuccess($msg);
                     Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE);
@@ -161,7 +180,7 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
                         $ipAddress = Mage::helper('core/http')->getRemoteAddr();
                         $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
 
-                        Mage::log("verifyGoogle - TFA Verify attempt FAILED for $adminId from IP $ipAddress", 0, "two_factor_auth.log");
+                        Mage::log("verifyGoogle - TFA Verify attempt FAILED for admin id $adminId from IP $ipAddress", 0, "two_factor_auth.log");
                     }
                     $msg = Mage::helper('he_twofactorauth')->__("Invalid code entered");
                     Mage::getSingleton('adminhtml/session')->addError($msg);
@@ -169,6 +188,12 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
                     return $this;
                 }
             } else {
+                if ($this->_shouldLogAccess) {
+                    $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+                    $adminId = $user = Mage::getSingleton('admin/session')->getUser()->getUserId();
+                    
+                    Mage::log("verifyGoogle - TFA Verify attempt FAILED for admin id $adminId from IP $ipAddress", 0, "two_factor_auth.log");                    
+                }
                 $msg = Mage::helper('he_twofactorauth')->__("Invalid code entered");
                 Mage::getSingleton('adminhtml/session')->addError($msg);
                 $this->_redirect('adminhtml/twofactor/google');

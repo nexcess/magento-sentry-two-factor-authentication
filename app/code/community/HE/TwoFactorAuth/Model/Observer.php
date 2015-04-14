@@ -195,9 +195,11 @@ class HE_TwoFactorAuth_Model_Observer
             if (isset($params['clear_google_secret'])) {                    
                 if ($params['clear_google_secret'] == 1) { 
                     $object = $observer->getEvent()->getObject();
-                    $object->twofactor_google_secret = ''; // just clear the secret
+                    $object->twofactor_google_secret = ''; // just clear the secret 
 
-                    Mage::log("Clearing google secret for admin user (" . $object->getUsername() . ")", 0, "two_factor_auth.log");
+                    // TODO - tie this into the shouldLogAccess check
+                    $ipAddress = Mage::helper('core/http')->getRemoteAddr();
+                    Mage::log("Clearing google secret for admin user (\"" . $object->getUsername() . "\"), IP: $ipAddress", 0, "two_factor_auth.log");                
                 }  
             }         
         }
