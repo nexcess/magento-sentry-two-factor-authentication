@@ -18,35 +18,13 @@
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
             <groups>
-            	   	<hint>
+                <hint>
 					<frontend_model>he_twofactorauth/adminhtml_system_config_fieldset_hint</frontend_model>
 					<sort_order>0</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>0</show_in_store>
                 </hint>
-                <info>
-                    <logging translate="label"/>
-                    <label>Module Information - Please Read First</label>
-                    <sort_order>1</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <comment>
-                        <![CDATA[<p>Human Element Multifactor authentication provides an additional check when logging into your
-                        Magento administration system. Once configured, an additional challenge screen is added to
-                        the admin login process.  This screen will interact with an additional method of contact, usually
-                        a cellphone or email, that will prove that the user attempting login is the real user.</p>
-                        <p>For more information, Wikipedia has a good introduction to
-                        <a href="http://en.wikipedia.org/wiki/Multi-factor_authentication" target="_new">Multifactor Authentication</a>
-                        <p><strong>NOTE - </strong>When using multifactor authentication it is highly advised that each admin user have their
-                        own account.</p>
-                        <p style="padding-top:10px">To find out more about Human Element and our Magento services, please visit our
-                        website at
-                        <a href="http://www.human-element.com/" target="_new">http://www.human-element.com</a> or fill
-                        in our <a href="http://www.human-element.com/contact/" target="_new">contact form</a>
-                        ]]>
-                    </comment>
-                </info>
                 <control>
                     <logging translate="label"/>
                     <label>Provider Selection</label>
