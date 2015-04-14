@@ -23,6 +23,8 @@ For more information on Google Authenticator, please see -
 - https://github.com/google/google-authenticator/wiki
 - https://support.google.com/accounts/answer/180744?hl=en&ref_topic=1099588
 
+### Referanced work
+
 Some code based on previous work by Jonathan Day jonathan@aligent.com.au
 - https://github.com/magento-hackathon/Magento-Two-factor-Authentication
 
