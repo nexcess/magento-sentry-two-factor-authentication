@@ -1,13 +1,12 @@
 <?php
-
 /*
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
  *
- * License  : MPL http://en.wikipedia.org/wiki/Mozilla_Public_License
+ * License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
  *
- * For more information on Duo security's Rest v2 API, please see the following URL
- * https://www.duosecurity.com/docs/authap
+ * For more information on Duo security's API, please see -
+ *   https://www.duosecurity.com
  */
 
 class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract

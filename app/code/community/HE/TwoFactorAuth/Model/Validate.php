@@ -3,12 +3,10 @@
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
  *
- * License  : MPL http://en.wikipedia.org/wiki/Mozilla_Public_License
+ * License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
  *
- * Base class for authentication validation testing
- *
- * For more information on Duo security's Rest v2 API, please see the following URL
- * https://www.duosecurity.com/docs/authap
+ * For more information on Duo security's API, please see -
+ *   https://www.duosecurity.com
  */
 
 

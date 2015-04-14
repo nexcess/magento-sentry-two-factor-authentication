@@ -1,6 +1,6 @@
 <?php
+// create the twofactor_google_secret table on admin_user
 
-// create the twofactor_google_secret table on admin_user 
 $installer = $this;
 $installer->startSetup();
 $installer->getConnection()
@@ -16,4 +16,4 @@ $installer->getConnection()
 );
 $installer->endSetup();
 
-// TODO add an uninstall script for users who remove module - apparently no autmatic way to do this
+// TODO add an uninstall script for users who remove module - apparently no automatic way to do this

@@ -4,13 +4,13 @@
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
  *
- * License  : MPL http://en.wikipedia.org/wiki/Mozilla_Public_License
+ * License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
  *
  * Observer watches login attempts (currently admin only) and will enforce multi-factor
  * authentication if not disabled.
  *
- * For more information on Duo security's Rest v2 API, please see the following URL
- * https://www.duosecurity.com/docs/authap
+ * For more information on Duo security's API, please see -
+ *   https://www.duosecurity.com
  */
 
 class HE_TwoFactorAuth_Model_Observer
@@ -195,11 +195,9 @@ class HE_TwoFactorAuth_Model_Observer
             if (isset($params['clear_google_secret'])) {                    
                 if ($params['clear_google_secret'] == 1) { 
                     $object = $observer->getEvent()->getObject();
-                    $object->twofactor_google_secret = ''; // just clear the secret 
+                    $object->twofactor_google_secret = ''; // just clear the secret
 
-                    // TODO - tie this into the shouldLogAccess check
-                    $ipAddress = Mage::helper('core/http')->getRemoteAddr();
-                    Mage::log("Clearing google secret for admin user (\"" . $object->getUsername() . "\"), IP: $ipAddress", 0, "two_factor_auth.log");                
+                    Mage::log("Clearing google secret for admin user (" . $object->getUsername() . ")", 0, "two_factor_auth.log");
                 }  
             }         
         }

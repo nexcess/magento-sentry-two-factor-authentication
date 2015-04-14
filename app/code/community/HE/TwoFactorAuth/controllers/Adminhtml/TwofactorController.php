@@ -1,13 +1,19 @@
 <?php
-
 /*
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
  *
- * License  : MPL http://en.wikipedia.org/wiki/Mozilla_Public_License
+ * License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
  *
- * For more information on Duo security's Rest v2 API, please see the following URL
- * https://www.duosecurity.com/docs/authap
+ * For more information on Duo security's API, please see -
+ *   https://www.duosecurity.com
+ *
+ * For more information on Google Authenticator, please see -
+ *   https://github.com/google/google-authenticator/wiki
+ *
+ * Some code based on previous work by Jonathan Day jonathan@aligent.com.au
+ *   https://github.com/magento-hackathon/Magento-Two-factor-Authentication
+ *
  */
 
 class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Controller_Action

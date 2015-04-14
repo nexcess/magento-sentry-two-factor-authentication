@@ -1,14 +1,12 @@
 <?php
-
 /*
- *
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
  *
- * License  : MPL http://en.wikipedia.org/wiki/Mozilla_Public_License
+ * License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
  *
- * Implements Duo Two Factor authentication handler for Magento
- *
+ * For more information on Duo security's API, please see -
+ *   https://www.duosecurity.com
  */
 
 include_once Mage::getBaseDir('lib') . DS . 'Duo' . DS . 'duo_web.php';

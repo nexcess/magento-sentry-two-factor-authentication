@@ -1,4 +1,17 @@
 <?php
+/*
+ * Author   : Aric Watson
+ *            Nexcess.net - https://www.nexcess.net
+ *
+ * License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
+ *
+ * For more information on Google Authenticator, please see -
+ *   https://github.com/google/google-authenticator/wiki
+ *
+ * Some code based on previous work by Michael Kliewe/PHPGangsta
+ *  https://github.com/PHPGangsta/GoogleAuthenticator
+ *  http://www.phpgangsta.de/
+ */
 
 require_once (Mage::getBaseDir('lib') . DS . 'GoogleAuthenticator' . DS . 'PHPGangsta' . DS . 'GoogleAuthenticator.php');
 

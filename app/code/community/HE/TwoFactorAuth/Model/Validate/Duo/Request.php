@@ -1,11 +1,10 @@
 <?php
 
 /*
- *
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
  *
- * License  : MPL http://en.wikipedia.org/wiki/Mozilla_Public_License
+ * License  : GPL  -- https://www.gnu.org/copyleft/gpl.html
  *
  * This class implements the Duo Security's V2 REST API.  Currently only 3 functions are supported
  *  - ping
@@ -17,8 +16,8 @@
  * If ping or check fail, then the integration is disabled.  This allows users to access the Magento admin
  * even if the Duo integration settings are incorrect.
  *
- * For more information on Duo security's Rest v2 API, please see the following URL
- * https://www.duosecurity.com/docs/authap
+ * For more information on Duo security's API, please see -
+ *   https://www.duosecurity.com
  */
 
 class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstract
