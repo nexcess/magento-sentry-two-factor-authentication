@@ -95,6 +95,7 @@ class HE_TwoFactorAuth_Model_Observer
                     Mage::log("check_twofactor_active - tfa state unknown - " . $tfaState, 0, "two_factor_auth.log");
                 }
         }
+
         if ($action == 'logout') {
             if ($this->_shouldLog) {
                 Mage::log("check_twofactor_active - logout", 0, "two_factor_auth.log");

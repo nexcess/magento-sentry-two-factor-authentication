@@ -77,6 +77,7 @@ class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstra
         } else {
             $cannon["params"] = "";
         }
+
         return implode("\n", $cannon);
     }
 
@@ -118,7 +119,7 @@ class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstra
      */
     protected function _addUrlParams($url)
     {
-        if (count($this->_params)>0) {
+        if (count($this->_params) > 0) {
             return $url . "?" . http_build_query(ksort($this->_params));
         } else {
             return $url;
@@ -134,7 +135,7 @@ class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstra
      * @return array|bool|mixed
      */
 
-    protected function _doRequest($raw=false,$debug=false)
+    protected function _doRequest($raw = false, $debug = false)
     {
         if ($this->_path == "") {
             return false;
@@ -160,19 +161,14 @@ class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstra
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         curl_setopt($curl, CURLOPT_VERBOSE, $debug);
-        curl_setopt($curl, CURLOPT_BINARYTRANSFER,$raw);
+        curl_setopt($curl, CURLOPT_BINARYTRANSFER, $raw);
 
         if (!$result = curl_exec($curl)) {
             $error = curl_error($curl);
         } else {
-            $error=false;
+            $error = false;
         }
         $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-
-        if ($debug) {
-            echo print_r(curl_getinfo($curl),true) ."\n";
-        }
 
         curl_close($curl);
 
@@ -180,10 +176,10 @@ class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstra
             //todo - put in error logging
             return false;
         } else {
-            if ($raw){
+            if ($raw) {
                 return $result;
             } else {
-                return json_decode($result,true);
+                return json_decode($result, true);
             }
         }
     }
@@ -232,7 +228,7 @@ class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstra
     public function logo()
     {
         $this->_path = "/auth/v2/logo";
-        $result = $this->_doRequest(true,true);
+        $result = $this->_doRequest(true);
 
         if (!$result) {
             return false;
@@ -245,8 +241,7 @@ class HE_TwoFactorAuth_Model_Validate_Duo_Request extends Mage_Core_Model_Abstra
         }
     }
 
-    // TODO -   the remainder of the DUO protocol will be filled out later
-    //          not needed for now
+    // TODO -   the remainder of the DUO protocol will be filled out later if needed
 
     public function enroll()
     {
