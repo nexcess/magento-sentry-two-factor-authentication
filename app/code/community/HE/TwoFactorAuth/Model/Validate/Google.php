@@ -13,7 +13,7 @@
  *  http://www.phpgangsta.de/
  */
 
-require_once (Mage::getBaseDir('lib') . DS . 'GoogleAuthenticator' . DS . 'PHPGangsta' . DS . 'GoogleAuthenticator.php');
+require_once(Mage::getBaseDir('lib') . DS . 'GoogleAuthenticator' . DS . 'PHPGangsta' . DS . 'GoogleAuthenticator.php');
 
 class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Validate
 {
@@ -40,16 +40,19 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
     }
 
 
-    public function isValid() {
-        return true; 
+    public function isValid()
+    {
+        return true;
     }
 
     /* 
      * generates and returns a new shared secret
      */
-    public function generateSecret() { 
+    public function generateSecret()
+    {
         $ga = new PHPGangsta_GoogleAuthenticator();
         $secret = $ga->createSecret();
+
         return $secret;
     }
 
@@ -57,11 +60,15 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
     /* 
      * generates and returns QR code URL from google
      */
-    public function generateQRCodeUrl($secret, $username) { 
-        if ((empty($secret)) || (empty($username))) { return; }
+    public function generateQRCodeUrl($secret, $username)
+    {
+        if ((empty($secret)) || (empty($username))) {
+            return;
+        }
 
         $ga = new PHPGangsta_GoogleAuthenticator();
         $url = $ga->getQRCodeGoogleUrl($username, $secret);
+
         return $url;
     }
 
@@ -70,27 +77,31 @@ class HE_TwoFactorAuth_Model_Validate_Google extends HE_TwoFactorAuth_Model_Vali
      * verifies the code using TOTP
      */
 
-    public function validateCode($code) {
-        if (empty($code)) { return; }
+    public function validateCode($code)
+    {
+        if (empty($code)) {
+            return;
+        }
         Mage::log("Google - validateCode: " . $code, 0, "two_factor_auth.log");
 
         // get user's shared secret
-        $user            = Mage::getSingleton('admin/session')->getUser();
-        $admin_user      = Mage::getModel('admin/user')->load($user->getId());
+        $user = Mage::getSingleton('admin/session')->getUser();
+        $admin_user = Mage::getModel('admin/user')->load($user->getId());
 
         $ga = new PHPGangsta_GoogleAuthenticator();
-        $secret = Mage::helper('core')->decrypt($admin_user->twofactor_google_secret);
+        $secret = Mage::helper('core')->decrypt($admin_user->getTwofactorGoogleSecret());
+
         return $ga->verifyCode($secret, $code, 1);
     }
-
 
 
     /*
      * abstract function in GoogleAuthenticator, needs to be defined here TODO
      */
-    function getDataBad($username,$index=NULL) // this was causing problems, not sure why...
+    function getDataBad($username, $index = null) // this was causing problems, not sure why...
     {
         $user = Mage::getModel('admin/user')->loadByUsername($username);
+
         return $user->getTwofactorauthToken() == null ? false : $user->getTwofactorauthToken();
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Author   : Greg Croasdill
  *            Human Element, Inc http://www.human-element.com
@@ -27,6 +28,7 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract
             if ($this->shouldLog()) {
                 Mage::log("isDisabled - Found tfaoff.flag, TFA disabled.", 0, "two_factor_auth.log");
             }
+
             return true;
         }
 

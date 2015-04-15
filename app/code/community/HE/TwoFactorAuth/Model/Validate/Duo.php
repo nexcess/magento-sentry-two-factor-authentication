@@ -24,7 +24,9 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
 
         if (!($this->_host && $this->_ikey && $this->_skey && $this->_akey)) {
             $this->_helper->disable2FA();
-            $msg = $this->_helper->__('Duo Twofactor Authentication is missing one or more settings. Please configure HE Two Factor Authentication.');
+            $msg = $this->_helper->__(
+                'Duo Twofactor Authentication is missing one or more settings. Please configure HE Two Factor Authentication.'
+            );
             Mage::getSingleton('adminhtml/session')->addError($msg);
         }
 
@@ -44,6 +46,7 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
     public function verifyResponse($response)
     {
         $verified = Duo::verifyResponse($this->_ikey, $this->_skey, $this->_akey, $response);
+
         return ($verified != null);
     }
 
@@ -57,38 +60,41 @@ class HE_TwoFactorAuth_Model_Validate_Duo extends HE_TwoFactorAuth_Model_Validat
         return Mage::getModel('he_twofactorauth/validate_duo_request')->check();
     }
 
-    public function isValid() {
+    public function isValid()
+    {
 
-        $status=HE_TwoFactorAuth_Model_Validate::TFA_CHECK_FAIL;
+        $status = HE_TwoFactorAuth_Model_Validate::TFA_CHECK_FAIL;
 
         //TODO - Use provider based checks instead of hardcoding for Duo
         if (!Mage::getModel('he_twofactorauth/validate_duo_request')->ping()) {
             $msg = $this->_helper->__('Can not connect to specified Duo API server - TFA settings not validated');
         } elseif (!$this->check()) {
-            $msg = $this->_helper->__('Credentials for Duo API server not accepted, please check - TFA settings not validated');
+            $msg = $this->_helper->__(
+                'Credentials for Duo API server not accepted, please check - TFA settings not validated'
+            );
         } else {
-            $status=HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS;
+            $status = HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS;
             $msg = $this->_helper->__('Credentials for Duo API server accepted - TFA settings validated');
         }
 
         //let the user know the status
-        if ($status==HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS) {
+        if ($status == HE_TwoFactorAuth_Model_Validate::TFA_CHECK_SUCCESS) {
             //Mage::getSingleton('adminhtml/session')->addSuccess($msg);
             if ($this->_shouldLog) {
                 Mage::log("isValid - $msg.", Zend_Log::ERR, "two_factor_auth.log");
             }
-            $newMode=$this->_helper->__('VALID');
+            $newMode = $this->_helper->__('VALID');
         } else {
             Mage::getSingleton('adminhtml/session')->addError($msg);
             if ($this->_shouldLog) {
                 Mage::log("isValid - $msg.", Zend_Log::INFO, "two_factor_auth.log");
             }
-            $newMode=$this->_helper->__('NOT VALID');
+            $newMode = $this->_helper->__('NOT VALID');
         }
 
         //if mode changed, update config
         if ($newMode <> Mage::getStoreConfig('he2faconfig/duo/validated')) {
-            Mage::getModel('core/config')-> saveConfig('he2faconfig/duo/validated', $newMode);
+            Mage::getModel('core/config')->saveConfig('he2faconfig/duo/validated', $newMode);
             Mage::app()->getStore()->resetConfig();
         }
 
