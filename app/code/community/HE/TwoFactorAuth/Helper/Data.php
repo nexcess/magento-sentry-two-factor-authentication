@@ -18,6 +18,7 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract
         $this->_provider = Mage::getStoreConfig('he2faconfig/control/provider');
         $this->_logging = Mage::getStoreConfig('he2faconfig/control/logging');
         $this->_logAccess = Mage::getStoreConfig('he2faconfig/control/logaccess');
+        $this->_ipWhitelist = $this->getIPWhitelist();
     }
 
     public function isDisabled()
@@ -65,5 +66,17 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract
     {
         Mage::getModel('core/config')->saveConfig('he2faconfig/control/provider', 'disabled');
         Mage::app()->getStore()->resetConfig();
+    }
+
+    private function getIPWhitelist()
+    {
+        $return = [];
+        $ips = preg_split("/\r\n|\n|\r/", trim(Mage::getStoreConfig('he2faconfig/control/ipwhitelist')));
+        foreach ($ips as $ip) { 
+            if (filter_var($ip, FILTER_VALIDATE_IP)) { 
+                $return[] = trim($ip);
+            }           
+        }
+        return $return;
     }
 }
