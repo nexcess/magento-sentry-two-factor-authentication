@@ -79,4 +79,21 @@ class HE_TwoFactorAuth_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $return;
     }
+
+
+    public function inWhitelist($ip) 
+    {
+        if (count($this->_ipWhitelist) == 0) { return false; }
+
+        if (in_array( $ip, $this->_ipWhitelist )) { 
+            if ( $this->shouldLogAccess() ) {
+                Mage::log("TFA bypassed for IP $ip - whitelisted", 0, "two_factor_auth.log");
+            }
+            return true;
+        }
+        else { 
+            return false; 
+        }
+    }
+
 }
