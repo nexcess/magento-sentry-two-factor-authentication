@@ -23,6 +23,23 @@ For more information on Google Authenticator, please see -
 - https://github.com/google/google-authenticator/wiki
 - https://support.google.com/accounts/answer/180744?hl=en&ref_topic=1099588
 
+
+## Support
+
+If you have an issue, please read the [FAQ](https://github.com/nexcess/magento-sentry-two-factor-authentication/wiki/FAQ)
+then if you still need help, open a bug report in GitHub's
+[issue tracker](https://github.com/nexcess/magento-sentry-two-factor-authentication/issues).
+
+Please do not use Magento Connect's Reviews or (especially) the Q&A for support.
+There isn't a way for me to reply to reviews and the Q&A moderation is very slow.
+
+## Contributing
+
+If you have a fix or feature for this module, submit a pull request through GitHub
+to the **devel** branch. The *master* branch is only for stable releases. Please
+make sure the new code follows the same style and conventions as already written
+code.
+
 ### Referanced work
 
 Some code based on previous work by Jonathan Day jonathan@aligent.com.au
