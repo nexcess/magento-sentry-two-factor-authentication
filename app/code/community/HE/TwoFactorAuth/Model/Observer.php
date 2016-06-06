@@ -28,6 +28,11 @@ class HE_TwoFactorAuth_Model_Observer
             return;
         }
 
+        // check ip-whitelist
+        if (Mage::helper('he_twofactorauth')->inWhitelist( Mage::helper('core/http')->getRemoteAddr() )) { 
+            Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE);
+        }
+
         if (Mage::getSingleton('admin/session')->get2faState() != HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE) {
 
             if ($this->_shouldLog) {
