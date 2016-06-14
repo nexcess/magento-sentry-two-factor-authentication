@@ -47,6 +47,19 @@
                             </comment>
                         </provider>
 
+                        <ipwhitelist>
+                            <label>Whitelisted IP Addresses</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <comment>
+                                <![CDATA[
+                                    You may whitelist IP addresses here (one per line). Anyone logging in from a whitelisted IP will not be required to perform two-factor authentication.
+                                ]]>
+                            </comment>                 
+                        </ipwhitelist>
+
                         <logaccess>
                             <label>Enable access logging</label>
                             <frontend_type>select</frontend_type>
