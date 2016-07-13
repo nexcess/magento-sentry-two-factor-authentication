@@ -216,9 +216,7 @@ class HE_TwoFactorAuth_Model_Observer
         // check that a user record has been saved
 
         // if google is turned and 2fa active...
-        if ((Mage::helper('he_twofactorauth')->getProvider() == 'google')
-            && (!Mage::helper('he_twofactorauth')->isDisabled())
-        ) {
+        if (Mage::helper('he_twofactorauth')->getProvider() == 'google') {
             $params = Mage::app()->getRequest()->getParams();
             if (isset($params['clear_google_secret'])) {
                 if ($params['clear_google_secret'] == 1) {
