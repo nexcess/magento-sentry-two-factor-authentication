@@ -15,7 +15,7 @@
 
 class HE_TwoFactorAuth_Model_Observer
 {
-    protected $_allowedActions = array('login', 'forgotpassword');
+    protected $_allowedActions = array('login', 'forgotpassword', 'resetpassword', 'resetpasswordpost');
 
     public function __construct()
     {
@@ -26,6 +26,11 @@ class HE_TwoFactorAuth_Model_Observer
     {
         if (Mage::helper('he_twofactorauth')->isDisabled()) {
             return;
+        }
+
+        // check ip-whitelist
+        if (Mage::helper('he_twofactorauth')->inWhitelist( Mage::helper('core/http')->getRemoteAddr() )) { 
+            Mage::getSingleton('admin/session')->set2faState(HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE);
         }
 
         if (Mage::getSingleton('admin/session')->get2faState() != HE_TwoFactorAuth_Model_Validate::TFA_STATE_ACTIVE) {
@@ -211,9 +216,7 @@ class HE_TwoFactorAuth_Model_Observer
         // check that a user record has been saved
 
         // if google is turned and 2fa active...
-        if ((Mage::helper('he_twofactorauth')->getProvider() == 'google')
-            && (!Mage::helper('he_twofactorauth')->isDisabled())
-        ) {
+        if (Mage::helper('he_twofactorauth')->getProvider() == 'google') {
             $params = Mage::app()->getRequest()->getParams();
             if (isset($params['clear_google_secret'])) {
                 if ($params['clear_google_secret'] == 1) {
