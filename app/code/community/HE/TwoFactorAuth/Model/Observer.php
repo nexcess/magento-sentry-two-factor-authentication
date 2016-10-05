@@ -15,7 +15,7 @@
 
 class HE_TwoFactorAuth_Model_Observer
 {
-    protected $_allowedActions = array('login', 'forgotpassword');
+    protected $_allowedActions = array('login', 'forgotpassword', 'resetpassword', 'resetpasswordpost');
 
     public function __construct()
     {
