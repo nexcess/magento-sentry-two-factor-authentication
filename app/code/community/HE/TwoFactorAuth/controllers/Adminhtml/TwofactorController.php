@@ -27,6 +27,14 @@ class HE_TwoFactorAuth_Adminhtml_TwofactorController extends Mage_Adminhtml_Cont
         parent::_construct();
     }
 
+    /**
+     * Allow all admin users to access the 2fa forms
+     */
+    protected function _isAllowed()
+    {
+        return true;
+    }
+
     //need an action per provider so that we can load the correct 2fa form
 
     public function duoAction()
