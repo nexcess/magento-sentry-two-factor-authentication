@@ -27,7 +27,7 @@
         </helpers>
 
         <events>
-            <controller_action_postdispatch_adminhtml>
+            <controller_action_predispatch_adminhtml>
                 <observers>
                     <he_twofactorauth_observer_check>
                         <type>singleton</type>
@@ -35,7 +35,7 @@
                         <method>check_twofactor_active</method>
                     </he_twofactorauth_observer_check>
                 </observers>
-            </controller_action_postdispatch_adminhtml>
+            </controller_action_predispatch_adminhtml>
         </events>
 
         <resources>
