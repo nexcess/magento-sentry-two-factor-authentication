@@ -40,7 +40,7 @@ to the **devel** branch. The *master* branch is only for stable releases. Please
 make sure the new code follows the same style and conventions as already written
 code.
 
-### Referanced work
+### Referenced work
 
 Some code based on previous work by Jonathan Day jonathan@aligent.com.au
 - https://github.com/magento-hackathon/Magento-Two-factor-Authentication
@@ -51,7 +51,7 @@ Some code based on previous work by Michael Kliewe/PHPGangsta
 
 ----
 ### Notes -
-1. Installing this module will update the AdminUser table in the Magento database to add a twofactor_google_secret
+1. Installing this module will update the admin_user table in the Magento database to add a twofactor_google_secret
 field for storing the local GA key. It is safe to remove this field once the module is removed.
 1. If you get locked out of admin because of a settings issue, loss of your provider account or other software related issue, you can *temporarily disable* the second factor authentication - 
  - Place a file named __tfaoff.flag__ in the root directory of your Magento installation.
