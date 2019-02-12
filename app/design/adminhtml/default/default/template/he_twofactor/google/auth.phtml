@@ -85,6 +85,17 @@
                         <li>Point the camera at the QR code above</li>
                         <li>When the app tells you the secret has been saved, press the 'Continue' button below.</li>
                     </ol>
+                    <br><br>
+                    <p><strong>Alternatively without barcode in Google Authenticator</strong>:</p>
+                    <ol>
+                        <li>Start the app</li>
+                        <li>Choose 'set up account' from the menu (top right corner)</li>
+                        <li>Insert this code: <b><?php echo $secret; ?></b></li>
+                        <li>Select: 'time based'</li>
+                        <li>Confirm</li>
+                        <li>When the app tells you the secret has been saved, press the 'Continue' button below.</li>
+                    </ol>
+                    <br>
 
                 <?php } else { // ... otherwise, show the input code field ?>
                     <div class="input-box forgot-password"><label for="input_code"><?php echo Mage::helper('adminhtml')->__('Security Code'); ?></label><br />
